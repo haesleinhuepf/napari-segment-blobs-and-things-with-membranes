@@ -26,6 +26,24 @@ def napari_experimental_provide_function():
         voronoi_otsu_labeling
     ]
 
+def _sobel_3d(image):
+    kernel = np.asarray([
+        [
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0]
+        ], [
+            [0, 1, 0],
+            [1, -6, 1],
+            [0, 1, 0]
+        ], [
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0]
+        ]
+    ])
+    return ndi.convolve(image, kernel)
+
 def binary_watershed(binary:LabelsData, sigma:float=3.5) -> LabelsData:
     """
     Takes a binary image and draws cuts in the objects similar to the ImageJ watershed algorithm.
@@ -47,8 +65,13 @@ def binary_watershed(binary:LabelsData, sigma:float=3.5) -> LabelsData:
     labels = watershed(-blurred_distance, markers, mask=binary)
 
     # identify label-cutting edges
-    edges = sobel(labels)
-    edges2 = sobel(binary)
+    if len(binary.shape) == 2:
+        edges = sobel(labels)
+        edges2 = sobel(binary)
+    else: # assuming 3D
+        edges = _sobel_3d(labels)
+        edges2 = _sobel_3d(binary)
+
     almost = np.logical_not(np.logical_xor(edges != 0, edges2 != 0)) * binary
     return binary_opening(almost)
 

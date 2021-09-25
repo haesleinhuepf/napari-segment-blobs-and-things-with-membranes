@@ -53,7 +53,6 @@ Binarizes an image using [scikit-image's threshold Otsu algorithm](https://sciki
 
 In case objects stick together after thresholding, this implementation of the watershed algorithm might help.
 It aims to deliver similar results as [ImageJ's watershed implementation](https://imagej.nih.gov/ij/docs/menus/process.html#watershed).
-This function appears to work well in 2D only at the moment.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/binary_watershed.png)
 

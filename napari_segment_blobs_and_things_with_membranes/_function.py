@@ -39,7 +39,8 @@ def binary_watershed(binary:LabelsData, sigma:float=3.5) -> LabelsData:
     # typical way of using scikit-image watershed
     distance = ndi.distance_transform_edt(binary)
     blurred_distance = gaussian(distance, sigma=sigma)
-    coords = peak_local_max(blurred_distance, footprint=np.ones((3, 3)), labels=binary)
+    fp = np.ones((3, 3)) if len(binary.shape) == 2 else np.ones((3, 3, 3))
+    coords = peak_local_max(blurred_distance, footprint=fp, labels=binary)
     mask = np.zeros(distance.shape, dtype=bool)
     mask[tuple(coords.T)] = True
     markers = label(mask)

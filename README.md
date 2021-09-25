@@ -6,14 +6,16 @@
 [![tests](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/workflows/tests/badge.svg)](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/actions)
 [![codecov](https://codecov.io/gh/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/branch/master/graph/badge.svg)](https://codecov.io/gh/haesleinhuepf/napari-segment-blobs-and-things-with-membranes)
 
-A plugin based on scikit-image for segmenting nuclei and cells based on fluorescent microscopy images with high intensity in nuclei and/or membranes
+A plugin based on scikit-image for segmenting nuclei and cells based on fluorescent microscopy images with high intensity in nuclei and/or membranes. 
+The available functions and their user interface based on [magicgui](https://napari.org/magicgui/) are shown below. You can also call these functions
+as shown in [the demo notebook](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/blob/main/docs/demo.ipynb).
 
 ## Voronoi-Otsu-Labeling
 
 This algorithm uses [Otsu's thresholding method](https://ieeexplore.ieee.org/document/4310076) in combination with 
 [Gaussian blur](https://scikit-image.org/docs/dev/api/skimage.filters.html#skimage.filters.gaussian) and a 
 [Voronoi-Tesselation](https://en.wikipedia.org/wiki/Voronoi_diagram) 
-approach to label bright objects such as nuclei in an intensity image.
+approach to label bright objects such as nuclei in an intensity image. This implementation aims to be similar to [Voronoi-Otsu-Labeling one in clesperanto](https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/demo/segmentation/voronoi_otsu_labeling.ipynb)
 
 ![img.png](docs/voronoi_otsu_labeling.png)
 

@@ -15,7 +15,9 @@ as shown in [the demo notebook](https://github.com/haesleinhuepf/napari-segment-
 This algorithm uses [Otsu's thresholding method](https://ieeexplore.ieee.org/document/4310076) in combination with 
 [Gaussian blur](https://scikit-image.org/docs/dev/api/skimage.filters.html#skimage.filters.gaussian) and a 
 [Voronoi-Tesselation](https://en.wikipedia.org/wiki/Voronoi_diagram) 
-approach to label bright objects such as nuclei in an intensity image. This implementation aims to be similar to [Voronoi-Otsu-Labeling one in clesperanto](https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/demo/segmentation/voronoi_otsu_labeling.ipynb)
+approach to label bright objects such as nuclei in an intensity image. The alogrithm has two sigma parameters which allow
+you to fine-tune where objects should be cut (`spot_sigma`) and how smooth outlines should be (`outline_sigma`).
+This implementation aims to be similar to [Voronoi-Otsu-Labeling in clesperanto](https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/demo/segmentation/voronoi_otsu_labeling.ipynb).
 
 ![img.png](docs/voronoi_otsu_labeling.png)
 

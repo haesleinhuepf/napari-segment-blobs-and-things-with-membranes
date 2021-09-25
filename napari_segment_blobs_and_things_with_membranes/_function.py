@@ -21,7 +21,7 @@ def napari_experimental_provide_function():
         threshold_otsu,
         binary_invert,
         split_touching_objects,
-        connected_components_labeling,
+        connected_component_labeling,
         seeded_watershed,
         voronoi_otsu_labeling
     ]
@@ -108,7 +108,7 @@ def binary_invert(binary_image:LabelsData) -> LabelsData:
     """
     return (np.asarray(binary_image) == 0) * 1
 
-def connected_components_labeling(binary_image:LabelsData) -> LabelsData:
+def connected_component_labeling(binary_image:LabelsData) -> LabelsData:
     """
     Takes a binary image and produces a label image with all separated objects labeled differently.
     """

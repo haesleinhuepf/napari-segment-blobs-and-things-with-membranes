@@ -56,12 +56,12 @@ It aims to deliver similar results as [ImageJ's watershed implementation](https:
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/binary_watershed.png)
 
-## Connected components labeling
+## Connected component labeling
 
 Takes a binary image and produces a label image with all separated objects labeled differently. Under the hood, it uses
 [scikit-image's label function](https://scikit-image.org/docs/dev/auto_examples/segmentation/plot_label.html).
 
-![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/connected_components_labeling.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/connected_component_labeling.png)
 
 ----------------------------------
 

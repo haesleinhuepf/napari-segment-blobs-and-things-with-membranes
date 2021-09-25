@@ -20,7 +20,7 @@ def napari_experimental_provide_function():
         subtract_background,
         threshold_otsu,
         binary_invert,
-        binary_watershed,
+        split_touching_objects,
         connected_components_labeling,
         seeded_watershed,
         voronoi_otsu_labeling
@@ -44,7 +44,7 @@ def _sobel_3d(image):
     ])
     return ndi.convolve(image, kernel)
 
-def binary_watershed(binary:LabelsData, sigma:float=3.5) -> LabelsData:
+def split_touching_objects(binary:LabelsData, sigma:float=3.5) -> LabelsData:
     """
     Takes a binary image and draws cuts in the objects similar to the ImageJ watershed algorithm.
 

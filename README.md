@@ -49,9 +49,9 @@ Binarizes an image using [scikit-image's threshold Otsu algorithm](https://sciki
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/threshold_otsu.png)
 
-## Binary watershed
+## Split touching objects (formerly known as binary watershed).
 
-In case objects stick together after thresholding, this implementation of the watershed algorithm might help.
+In case objects stick together after thresholding, this tool might help.
 It aims to deliver similar results as [ImageJ's watershed implementation](https://imagej.nih.gov/ij/docs/menus/process.html#watershed).
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/binary_watershed.png)

@@ -19,35 +19,35 @@ approach to label bright objects such as nuclei in an intensity image. The alogr
 you to fine-tune where objects should be cut (`spot_sigma`) and how smooth outlines should be (`outline_sigma`).
 This implementation aims to be similar to [Voronoi-Otsu-Labeling in clesperanto](https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/demo/segmentation/voronoi_otsu_labeling.ipynb).
 
-![img.png](docs/voronoi_otsu_labeling.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/voronoi_otsu_labeling.png)
 
 ## Seeded Watershed
 
 Starting from an image showing high-intensity membranes and a seed-image where objects have been labeled (e.g. using Voronoi-Otsu-Labeling),
 objects are labeled that are constrained by the membranes.
 
-![img.png](docs/seeded_watershed.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/seeded_watershed.png)
 
 ## Gaussian blur
 
 Applies a [Gaussian blur](https://scikit-image.org/docs/dev/api/skimage.filters.html#skimage.filters.gaussian) to an
 image. This might be useful for denoising, e.g. before applying the Threshold-Otsu method.
 
-![img.png](docs/gaussian_blur.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/gaussian_blur.png)
 
 ## Subtract background
 
 Subtracts background using [scikit-image's rolling-ball algorithm](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rolling_ball.html). 
 This might be useful, for example to make intensity of membranes more similar in different regions of an image.
 
-![img.png](docs/subtract_background.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/subtract_background.png)
 
 ## Threshold Otsu
 
 Binarizes an image using [scikit-image's threshold Otsu algorithm](https://scikit-image.org/docs/dev/auto_examples/segmentation/plot_thresholding.html), also known as 
 [Otsu's method](https://ieeexplore.ieee.org/document/4310076).
 
-![img.png](docs/threshold_otsu.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/threshold_otsu.png)
 
 ## Binary watershed
 
@@ -55,14 +55,14 @@ In case objects stick together after thresholding, this implementation of the wa
 It aims to deliver similar results as [ImageJ's watershed implementation](https://imagej.nih.gov/ij/docs/menus/process.html#watershed).
 This function appears to work well in 2D only at the moment.
 
-![img.png](docs/binary_watershed.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/binary_watershed.png)
 
 ## Connected components labeling
 
 Takes a binary image and produces a label image with all separated objects labeled differently. Under the hood, it uses
 [scikit-image's label function](https://scikit-image.org/docs/dev/auto_examples/segmentation/plot_label.html).
 
-![img.png](docs/connected_components_labeling.png)
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/connected_components_labeling.png)
 
 ----------------------------------
 

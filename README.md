@@ -69,7 +69,13 @@ This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [c
 
 ## Installation
 
-You can install `napari-segment-blobs-and-things-with-membranes` via [pip]:
+Download, unzip and install napari from its [github releases page](https://github.com/napari/napari/releases/tag/v0.4.11):
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/napari_download.png)
+
+Afterwards, go to the menu `Plugins > Install/uninstall plugins...` and click on the install button next to `napari-segment-blobs-and-things-with-membranes`:
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/napari_plugin_installer.png)
+
+You can also install `napari-segment-blobs-and-things-with-membranes` via [pip]:
 
     pip install napari-segment-blobs-and-things-with-membranes
 

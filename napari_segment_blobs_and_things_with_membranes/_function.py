@@ -10,7 +10,7 @@ from skimage.segmentation import watershed
 from skimage.feature import peak_local_max
 from skimage.morphology import binary_opening
 from skimage.measure import label
-from skimage.morphology import local_maxima
+from skimage.morphology import local_maxima, local_minima
 from skimage.restoration import rolling_ball
 from napari_tools_menu import register_function
 
@@ -169,3 +169,31 @@ def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsDa
         np.asarray(labeled_nuclei)
     )
     return cells
+
+
+@register_function(menu="Segmentation > Seeded watershed using local minima as seeds")
+def local_minima_seeded_watershed(image:ImageData, spot_sigma:float=10, outline_sigma:float=0) -> LabelsData:
+    """
+    Segment cells in images with marked membranes.
+
+    The two sigma parameters allow tuning the segmentation result. The first sigma controls how close detected cells
+    can be (spot_sigma) and the second controls how precise segmented objects are outlined (outline_sigma). Under the
+    hood, this filter applies two Gaussian blurs, local minima detection and a seeded watershed.
+
+    See also
+    --------
+    .. [1] https://scikit-image.org/docs/dev/auto_examples/segmentation/plot_watershed.html
+    """
+
+    image = np.asarray(image)
+
+    spot_blurred = gaussian(image, sigma=spot_sigma)
+
+    spots = label(local_minima(spot_blurred))
+
+    if outline_sigma == spot_sigma:
+        outline_blurred = spot_blurred
+    else:
+        outline_blurred = gaussian(image, sigma=outline_sigma)
+
+    return watershed(outline_blurred, spots)

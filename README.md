@@ -28,6 +28,14 @@ objects are labeled that are constrained by the membranes.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/seeded_watershed.png)
 
+## Seeded Watershed using local minima as starting points
+
+Similar to the Seeded Watershed and Voronoi-Otsu-Labeling explained above, you can use this tool to segment an image
+showing membranes without an additional image showing nuclei. The two sigma parameters allow to fine tune how close 
+objects can be and how precise their boundaries are detected.
+
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/local_minima_seeded_watershed.png)
+
 ## Gaussian blur
 
 Applies a [Gaussian blur](https://scikit-image.org/docs/dev/api/skimage.filters.html#skimage.filters.gaussian) to an

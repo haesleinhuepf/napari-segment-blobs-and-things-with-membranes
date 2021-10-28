@@ -13,6 +13,10 @@ from skimage.measure import label
 from skimage.morphology import local_maxima, local_minima
 from skimage.restoration import rolling_ball
 from napari_tools_menu import register_function
+from skimage import filters
+import scipy
+from scipy import ndimage
+import napari
 
 @napari_hook_implementation
 def napari_experimental_provide_function():
@@ -93,12 +97,54 @@ def threshold_otsu(image:ImageData) -> LabelsData:
 
     return binary_otsu * 1
 
-@register_function(menu="Filtering > Gaussian (nsbatwm)")
+@register_function(menu="Filtering > Gaussian (scikit-image, nsbatwm)")
 def gaussian_blur(image:ImageData, sigma:float=1) -> ImageData:
     """
     Applies a Gaussian blur to an image with a defined sigma. Useful for denoising.
     """
     return gaussian(image, sigma)
+
+
+@register_function(menu="Filtering > Gaussian Laplace (scipy, nsbatwm)")
+def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
+
+
+@register_function(menu="Filtering > Median (scipy, nsbatwm)")
+def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.median_filter(image.astype(float), size=int(radius * 2 + 1))
+
+
+@register_function(menu="Filtering > Percentile (scipy, nsbatwm)")
+def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.percentile_filter(image.astype(float), percentile=percentile, size=int(radius * 2 + 1))
+
+
+@register_function(menu="Filtering > Top-hat (white, cupy)")
+def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Top-hat (black, cupy)")
+def black_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.black_tophat(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Minimum (scipy, nsbatwm)")
+def minimum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.minimum_filter(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Maximum (scipy, nsbatwm)")
+def maximum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.maximum_filter(image.astype(float), size=radius * 2 + 1)
+
+
+@register_function(menu="Filtering > Morphological Gradient (scipy, nsbatwm)")
+@plugin_function
+def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    return scipy.ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
+
 
 @register_function(menu="Filtering > Subtract background (rolling ball, nsbatwm)")
 def subtract_background(image:ImageData, rolling_ball_radius:float = 5) -> ImageData:
@@ -113,7 +159,7 @@ def binary_invert(binary_image:LabelsData) -> LabelsData:
     """
     return (np.asarray(binary_image) == 0) * 1
 
-@register_function(menu="Segmentation > Connected component labeling (nsbatwm)")
+@register_function(menu="Segmentation > Connected component labeling (scikit-image, nsbatwm)")
 def connected_component_labeling(binary_image:LabelsData) -> LabelsData:
     """
     Takes a binary image and produces a label image with all separated objects labeled differently.
@@ -154,7 +200,7 @@ def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma:
 
     return labels
 
-@register_function(menu="Segmentation > Seeded watershed (nsbatwm)")
+@register_function(menu="Segmentation > Seeded watershed (scikit-image, nsbatwm)")
 def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsData:
     """
     Takes a image with brigh (high intensity) membranes and an image with labeled objects such as nuclei.

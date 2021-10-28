@@ -28,7 +28,15 @@ def napari_experimental_provide_function():
         split_touching_objects,
         connected_component_labeling,
         seeded_watershed,
-        voronoi_otsu_labeling
+        voronoi_otsu_labeling,
+        gaussian_laplace,
+        median_filter,
+        maximum_filter,
+        minimum_filter,
+        percentile_filter,
+        black_tophat,
+        white_tophat,
+        morphological_gradient
     ]
 
 def _sobel_3d(image):

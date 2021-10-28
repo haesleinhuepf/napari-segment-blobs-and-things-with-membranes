@@ -1,4 +1,4 @@
-# napari-segment-blobs-and-things-with-membranes
+# napari-segment-blobs-and-things-with-membranes (nsbatwm)
 
 [![License](https://img.shields.io/pypi/l/napari-segment-blobs-and-things-with-membranes.svg?color=green)](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/master/LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/napari-segment-blobs-and-things-with-membranes.svg?color=green)](https://pypi.org/project/napari-segment-blobs-and-things-with-membranes)

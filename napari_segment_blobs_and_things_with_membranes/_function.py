@@ -45,7 +45,7 @@ def _sobel_3d(image):
     ])
     return ndi.convolve(image, kernel)
 
-@register_function(menu="Segmentation > Split touching objects")
+@register_function(menu="Segmentation > Split touching objects (nsbatwm)")
 def split_touching_objects(binary:LabelsData, sigma:float=3.5) -> LabelsData:
     """
     Takes a binary image and draws cuts in the objects similar to the ImageJ watershed algorithm.
@@ -77,7 +77,7 @@ def split_touching_objects(binary:LabelsData, sigma:float=3.5) -> LabelsData:
     almost = np.logical_not(np.logical_xor(edges != 0, edges2 != 0)) * binary
     return binary_opening(almost)
 
-@register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image)")
+@register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image, nsbatwm)")
 def threshold_otsu(image:ImageData) -> LabelsData:
     """
     Applies Otsu's threshold selection method to an intensity image and returns a binary image with pixels==1 where
@@ -93,27 +93,27 @@ def threshold_otsu(image:ImageData) -> LabelsData:
 
     return binary_otsu * 1
 
-@register_function(menu="Filtering > Gaussian blur (scikit-image)")
+@register_function(menu="Filtering > Gaussian (nsbatwm)")
 def gaussian_blur(image:ImageData, sigma:float=1) -> ImageData:
     """
     Applies a Gaussian blur to an image with a defined sigma. Useful for denoising.
     """
     return gaussian(image, sigma)
 
-@register_function(menu="Filtering > Subtract background (rolling ball, scikit-image)")
+@register_function(menu="Filtering > Subtract background (rolling ball, nsbatwm)")
 def subtract_background(image:ImageData, rolling_ball_radius:float = 5) -> ImageData:
     background = rolling_ball(image, radius = rolling_ball_radius)
     return image - background
 
 
-@register_function(menu="Segmentation > Invert binary image")
+@register_function(menu="Segmentation > Invert binary image (nsbatwm)")
 def binary_invert(binary_image:LabelsData) -> LabelsData:
     """
     Inverts a binary image.
     """
     return (np.asarray(binary_image) == 0) * 1
 
-@register_function(menu="Segmentation > Connected component labeling")
+@register_function(menu="Segmentation > Connected component labeling (nsbatwm)")
 def connected_component_labeling(binary_image:LabelsData) -> LabelsData:
     """
     Takes a binary image and produces a label image with all separated objects labeled differently.
@@ -121,7 +121,7 @@ def connected_component_labeling(binary_image:LabelsData) -> LabelsData:
     return label(np.asarray(binary_image))
 
 
-@register_function(menu="Segmentation > Labeling (Voronoi-Otsu-labeling)")
+@register_function(menu="Segmentation > Voronoi-Otsu-labeling (nsbatwm)")
 def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma: float = 2) -> LabelsData:
     """
     The two sigma parameters allow tuning the segmentation result. The first sigma controls how close detected cells
@@ -154,7 +154,7 @@ def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma:
 
     return labels
 
-@register_function(menu="Segmentation > Seeded watershed")
+@register_function(menu="Segmentation > Seeded watershed (nsbatwm)")
 def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsData:
     """
     Takes a image with brigh (high intensity) membranes and an image with labeled objects such as nuclei.
@@ -171,7 +171,7 @@ def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsDa
     return cells
 
 
-@register_function(menu="Segmentation > Seeded watershed using local minima as seeds")
+@register_function(menu="Segmentation > Seeded watershed using local minima as seeds (nsbatwm)")
 def local_minima_seeded_watershed(image:ImageData, spot_sigma:float=10, outline_sigma:float=0) -> LabelsData:
     """
     Segment cells in images with marked membranes.

@@ -149,7 +149,6 @@ def maximum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.t
 
 
 @register_function(menu="Filtering > Morphological Gradient (scipy, nsbatwm)")
-@plugin_function
 def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
     return scipy.ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
 

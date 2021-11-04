@@ -13,6 +13,9 @@ from skimage.measure import label
 from skimage.morphology import local_maxima, local_minima
 from skimage.restoration import rolling_ball
 from napari_tools_menu import register_function
+from skimage.measure import regionprops
+from skimage.segmentation import relabel_sequential
+
 from skimage import filters
 import scipy
 from scipy import ndimage
@@ -36,7 +39,9 @@ def napari_experimental_provide_function():
         percentile_filter,
         black_tophat,
         white_tophat,
-        morphological_gradient
+        morphological_gradient,
+        local_minima_seeded_watershed,
+        thresholded_local_minima_seeded_watershed
     ]
 
 def _sobel_3d(image):
@@ -250,3 +255,27 @@ def local_minima_seeded_watershed(image:ImageData, spot_sigma:float=10, outline_
         outline_blurred = gaussian(image, sigma=outline_sigma)
 
     return watershed(outline_blurred, spots)
+
+@register_function(menu="Segmentation > Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
+def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=3, outline_sigma:float=0, minimum_intensity:float=500) -> LabelsData:
+    """
+    Segment cells in images with marked membranes that have a high signal intensity.
+
+    The two sigma parameters allow tuning the segmentation result. The first sigma controls how close detected cells
+    can be (spot_sigma) and the second controls how precise segmented objects are outlined (outline_sigma). Under the
+    hood, this filter applies two Gaussian blurs, local minima detection and a seeded watershed.
+
+    Afterwards, all objects are removed that have an average intensity below a given minimum_intensity
+    """
+    labels = local_minima_seeded_watershed(image, spot_sigma=spot_sigma, outline_sigma=outline_sigma)
+
+    # measure intensities
+    stats = regionprops(labels, image)
+    intensities = [r.mean_intensity for r in stats]
+
+    # filter labels with low intensity
+    new_label_indices, _, _ = relabel_sequential((np.asarray(intensities) > minimum_intensity) * np.arange(labels.max()))
+    new_label_indices = np.insert(new_label_indices, 0, 0)
+    new_labels = np.take(np.asarray(new_label_indices, np.uint8), labels)
+
+    return new_labels

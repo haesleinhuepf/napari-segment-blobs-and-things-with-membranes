@@ -193,7 +193,7 @@ def binary_invert(binary_image:LabelsData, viewer: napari.Viewer = None) -> Labe
 @register_function(menu="Segmentation > Connected component labeling (scikit-image, nsbatwm)")
 @time_slicer
 def connected_component_labeling(binary_image: LabelsData, viewer: napari.Viewer = None,
-                                 exclude_on_edges: bool = False, timelapse: bool = True) -> LabelsData:
+                                 exclude_on_edges: bool = False) -> LabelsData:
     """
     Takes a binary image and produces a label image with all separated objects labeled differently.
 
@@ -201,23 +201,8 @@ def connected_component_labeling(binary_image: LabelsData, viewer: napari.Viewer
     ----------
     exclude_on_edges : bool, optional
         Whether or not to clear objects connected to the label image border/planes (either xy, xz or yz).
-    timelapse: bool, optional
-        Whether or not the image is a timelapse. Important to select if exclude_on_edges is selected. Wrong selection
-        would lead to the incorrect labels removal from borders because time dimension would be also used to construct a
-        border/plane, i.e. labels that appear in the first and last timepoints would be excluded.
     """
-    if viewer is not None and timelapse and exclude_on_edges:
-        # processing a 4D-data (3D+time data set)
-        if len(viewer.dims.current_step) == 4:
-            return label(clear_border(np.asarray(binary_image)))
-
-        # in case we process a 3D-data (2D+time data set), current timepoint needs to be read and only x,y data provided
-        # to the clear_border function. Otherwise time dimension would be also used to construct a border/plane
-        elif len(viewer.dims.current_step) == 3:
-            t_position = viewer.dims.current_step[0]
-            return label(clear_border(np.asarray(binary_image[t_position])))
-
-    elif exclude_on_edges:
+    if exclude_on_edges:
         # processing the image, which is not a timelapse
         return label(clear_border(np.asarray(binary_image)))
 

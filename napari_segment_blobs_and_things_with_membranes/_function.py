@@ -193,8 +193,8 @@ def binary_invert(binary_image:LabelsData, viewer: napari.Viewer = None) -> Labe
 
 @register_function(menu="Segmentation > Connected component labeling (scikit-image, nsbatwm)")
 @time_slicer
-def connected_component_labeling(binary_image: LabelsData, viewer: napari.Viewer = None,
-                                 exclude_on_edges: bool = False) -> LabelsData:
+def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: bool = False,
+                                 viewer: napari.Viewer = None) -> LabelsData:
     """
     Takes a binary image and produces a label image with all separated objects labeled differently.
 

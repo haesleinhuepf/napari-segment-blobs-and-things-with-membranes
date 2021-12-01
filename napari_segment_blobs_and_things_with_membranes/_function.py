@@ -210,6 +210,20 @@ def connected_component_labeling(binary_image: LabelsData, viewer: napari.Viewer
         return label(np.asarray(binary_image))
 
 
+@register_function(menu="Segmentation > Remove labeled objects at the image border (scikit-image, nsbatwm)")
+@time_slicer
+def remove_labels_on_edges(label_image: LabelsData, viewer: napari.Viewer = None) -> LabelsData:
+    """
+    Takes a label image and removes objects that touch the image border.
+
+    See also
+    --------
+    ..[0] https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.clear_border
+    """
+
+    return clear_border(np.asarray(label_image))
+
+
 @register_function(menu="Segmentation > Voronoi-Otsu-labeling (nsbatwm)")
 @time_slicer
 def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma: float = 2, viewer: napari.Viewer = None) -> LabelsData:

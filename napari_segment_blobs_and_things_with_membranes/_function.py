@@ -16,6 +16,7 @@ from napari_tools_menu import register_function
 from skimage.measure import regionprops
 from skimage.segmentation import relabel_sequential
 from skimage.segmentation import clear_border
+from skimage.segmentation import expand_labels as sk_expand_labels
 
 from skimage import filters
 import scipy
@@ -222,6 +223,21 @@ def remove_labels_on_edges(label_image: LabelsData, viewer: napari.Viewer = None
     """
 
     return clear_border(np.asarray(label_image))
+
+
+@register_function(menu="Segmentation > Expand labels (scikit-image, nsbatwm)")
+@time_slicer
+def expand_labels(label_image: LabelsData, distance: float = 1, viewer: napari.Viewer = None) -> LabelsData:
+    """
+    Takes a label image and makes labels larger up to a given radius (distance).
+    Labels will not overwrite each other while expanding.
+
+    See also
+    --------
+    ..[0] https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.expand_labels
+    """
+
+    return sk_expand_labels(np.asarray(label_image), distance=distance)
 
 
 @register_function(menu="Segmentation > Voronoi-Otsu-labeling (nsbatwm)")

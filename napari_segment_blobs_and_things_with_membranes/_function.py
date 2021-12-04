@@ -70,7 +70,7 @@ def _sobel_3d(image):
     return ndi.convolve(image, kernel)
 
 
-@register_function(menu="Segmentation post processing > Split touching objects (nsbatwm)")
+@register_function(menu="Segmentation post-processing > Split touching objects (nsbatwm)")
 @time_slicer
 def split_touching_objects(binary:LabelsData, sigma:float=3.5, viewer: napari.Viewer = None) -> LabelsData:
     """

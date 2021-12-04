@@ -44,7 +44,10 @@ def napari_experimental_provide_function():
         white_tophat,
         morphological_gradient,
         local_minima_seeded_watershed,
-        thresholded_local_minima_seeded_watershed
+        thresholded_local_minima_seeded_watershed,
+        sum_images,
+        multiply_images,
+        divide_images
     ]
 
 def _sobel_3d(image):
@@ -352,3 +355,17 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=
 def sum_images(image1: ImageData, image2: ImageData, factor1:float = 1, factor2:float = 1,
                                  viewer: napari.Viewer = None) -> ImageData:
     return image1 * factor1 + image2 * factor2
+
+
+@register_function(menu="Image math > Multiply images (scikit-image, nsbatwm)")
+@time_slicer
+def multiply_images(image1: ImageData, image2: ImageData,
+                                 viewer: napari.Viewer = None) -> ImageData:
+    return image1 * image2
+
+
+@register_function(menu="Image math > Divide images (scikit-image, nsbatwm)")
+@time_slicer
+def divide_images(image1: ImageData, image2: ImageData,
+                                 viewer: napari.Viewer = None) -> ImageData:
+    return image1 / image2

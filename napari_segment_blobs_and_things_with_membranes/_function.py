@@ -346,3 +346,9 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=
     new_labels = np.take(np.asarray(new_label_indices, np.uint8), labels)
 
     return new_labels
+
+@register_function(menu="Image math > Sum images (scikit-image, nsbatwm)", factor1={'min': -1000000, 'max': 1000000}, factor2={'min': -1000000, 'max': 1000000})
+@time_slicer
+def sum_images(image1: ImageData, image2: ImageData, factor1:float = 1, factor2:float = 1,
+                                 viewer: napari.Viewer = None) -> ImageData:
+    return image1 * factor1 + image2 * factor2

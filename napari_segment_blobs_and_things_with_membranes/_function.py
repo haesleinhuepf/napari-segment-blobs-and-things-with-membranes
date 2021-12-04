@@ -350,22 +350,30 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=
 
     return new_labels
 
-@register_function(menu="Image math > Sum images (scikit-image, nsbatwm)", factor1={'min': -1000000, 'max': 1000000}, factor2={'min': -1000000, 'max': 1000000})
+@register_function(menu="Image math > Sum images (numpy, nsbatwm)", factor1={'min': -1000000, 'max': 1000000}, factor2={'min': -1000000, 'max': 1000000})
 @time_slicer
 def sum_images(image1: ImageData, image2: ImageData, factor1:float = 1, factor2:float = 1,
                                  viewer: napari.Viewer = None) -> ImageData:
     return image1 * factor1 + image2 * factor2
 
 
-@register_function(menu="Image math > Multiply images (scikit-image, nsbatwm)")
+@register_function(menu="Image math > Multiply images (numpy, nsbatwm)")
 @time_slicer
 def multiply_images(image1: ImageData, image2: ImageData,
                                  viewer: napari.Viewer = None) -> ImageData:
     return image1 * image2
 
 
-@register_function(menu="Image math > Divide images (scikit-image, nsbatwm)")
+@register_function(menu="Image math > Divide images (numpy, nsbatwm)")
 @time_slicer
 def divide_images(image1: ImageData, image2: ImageData,
                                  viewer: napari.Viewer = None) -> ImageData:
     return image1 / image2
+
+
+@register_function(menu="Image math > Invert image (scikit-image, nsbatwm)")
+@time_slicer
+def invert_image(image: ImageData,
+                                 viewer: napari.Viewer = None) -> ImageData:
+    from skimage import util
+    return util.invert(image)

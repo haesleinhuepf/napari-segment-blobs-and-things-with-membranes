@@ -47,7 +47,8 @@ def napari_experimental_provide_function():
         thresholded_local_minima_seeded_watershed,
         sum_images,
         multiply_images,
-        divide_images
+        divide_images,
+        invert_image
     ]
 
 def _sobel_3d(image):
@@ -69,7 +70,7 @@ def _sobel_3d(image):
     return ndi.convolve(image, kernel)
 
 
-@register_function(menu="Segmentation > Split touching objects (nsbatwm)")
+@register_function(menu="Segmentation post processing > Split touching objects (nsbatwm)")
 @time_slicer
 def split_touching_objects(binary:LabelsData, sigma:float=3.5, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -103,7 +104,7 @@ def split_touching_objects(binary:LabelsData, sigma:float=3.5, viewer: napari.Vi
     return binary_opening(almost)
 
 
-@register_function(menu="Segmentation > Threshold (Otsu et al 1979, scikit-image, nsbatwm)")
+@register_function(menu="Segmentation / binarization > Threshold (Otsu et al 1979, scikit-image, nsbatwm)")
 @time_slicer
 def threshold_otsu(image:ImageData, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -121,7 +122,7 @@ def threshold_otsu(image:ImageData, viewer: napari.Viewer = None) -> LabelsData:
     return binary_otsu * 1
 
 
-@register_function(menu="Filtering > Gaussian (scikit-image, nsbatwm)")
+@register_function(menu="Filtering / noise removal > Gaussian (scikit-image, nsbatwm)")
 @time_slicer
 def gaussian_blur(image:ImageData, sigma:float=1, viewer: napari.Viewer = None) -> ImageData:
     """
@@ -130,62 +131,62 @@ def gaussian_blur(image:ImageData, sigma:float=1, viewer: napari.Viewer = None) 
     return gaussian(image, sigma)
 
 
-@register_function(menu="Filtering > Gaussian Laplace (scipy, nsbatwm)")
+@register_function(menu="Filtering / edge enhancement > Gaussian Laplace (scipy, nsbatwm)")
 @time_slicer
 def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
 
 
-@register_function(menu="Filtering > Median (scipy, nsbatwm)")
+@register_function(menu="Filtering / noise removal > Median (scipy, nsbatwm)")
 @time_slicer
 def median_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.median_filter(image.astype(float), size=int(radius * 2 + 1))
 
 
-@register_function(menu="Filtering > Percentile (scipy, nsbatwm)")
+@register_function(menu="Filtering / noise removal > Percentile (scipy, nsbatwm)")
 @time_slicer
 def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.percentile_filter(image.astype(float), percentile=percentile, size=int(radius * 2 + 1))
 
 
-@register_function(menu="Filtering > Top-hat (white, cupy)")
+@register_function(menu="Filtering / background removal > Whate top-hat (scipy, nsbatwm)")
 @time_slicer
 def white_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Top-hat (black, cupy)")
+@register_function(menu="Filtering / background removal > Black top-hat (scipy, nsbatwm)")
 @time_slicer
 def black_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.black_tophat(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Minimum (scipy, nsbatwm)")
+@register_function(menu="Filtering / background removal > Minimum (scipy, nsbatwm)")
 @time_slicer
 def minimum_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.minimum_filter(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Maximum (scipy, nsbatwm)")
+@register_function(menu="Filtering / background removal > Maximum (scipy, nsbatwm)")
 @time_slicer
 def maximum_filter(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.maximum_filter(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Morphological Gradient (scipy, nsbatwm)")
+@register_function(menu="Filtering / background removal > Morphological Gradient (scipy, nsbatwm)")
 @time_slicer
 def morphological_gradient(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering > Subtract background (rolling ball, nsbatwm)")
+@register_function(menu="Filtering / background removal > Rolling ball (scikit-image, nsbatwm)")
 @time_slicer
 def subtract_background(image:ImageData, rolling_ball_radius:float = 5, viewer: napari.Viewer = None) -> ImageData:
     background = rolling_ball(image, radius = rolling_ball_radius)
     return image - background
 
 
-@register_function(menu="Segmentation > Invert binary image (nsbatwm)")
+@register_function(menu="Segmentation post-processing > Invert binary image (nsbatwm)")
 @time_slicer
 def binary_invert(binary_image:LabelsData, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -194,7 +195,7 @@ def binary_invert(binary_image:LabelsData, viewer: napari.Viewer = None) -> Labe
     return (np.asarray(binary_image) == 0) * 1
 
 
-@register_function(menu="Segmentation > Connected component labeling (scikit-image, nsbatwm)")
+@register_function(menu="Segmentation / labeling > Connected component labeling (scikit-image, nsbatwm)")
 @time_slicer
 def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: bool = False,
                                  viewer: napari.Viewer = None) -> LabelsData:
@@ -214,7 +215,7 @@ def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: boo
         return label(np.asarray(binary_image))
 
 
-@register_function(menu="Segmentation > Remove labeled objects at the image border (scikit-image, nsbatwm)")
+@register_function(menu="Segmentation post-processing > Remove labeled objects at the image border (scikit-image, nsbatwm)")
 @time_slicer
 def remove_labels_on_edges(label_image: LabelsData, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -228,7 +229,7 @@ def remove_labels_on_edges(label_image: LabelsData, viewer: napari.Viewer = None
     return clear_border(np.asarray(label_image))
 
 
-@register_function(menu="Segmentation > Expand labels (scikit-image, nsbatwm)")
+@register_function(menu="Segmentation post-processing > Expand labels (scikit-image, nsbatwm)")
 @time_slicer
 def expand_labels(label_image: LabelsData, distance: float = 1, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -243,7 +244,7 @@ def expand_labels(label_image: LabelsData, distance: float = 1, viewer: napari.V
     return sk_expand_labels(np.asarray(label_image), distance=distance)
 
 
-@register_function(menu="Segmentation > Voronoi-Otsu-labeling (nsbatwm)")
+@register_function(menu="Segmentation / labeling > Voronoi-Otsu-labeling (nsbatwm)")
 @time_slicer
 def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma: float = 2, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -278,7 +279,7 @@ def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma:
     return labels
 
 
-@register_function(menu="Segmentation > Seeded watershed (scikit-image, nsbatwm)")
+@register_function(menu="Segmentation / labeling > Seeded watershed (scikit-image, nsbatwm)")
 @time_slicer
 def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -296,7 +297,7 @@ def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData, viewer: nap
     return cells
 
 
-@register_function(menu="Segmentation > Seeded watershed using local minima as seeds (nsbatwm)")
+@register_function(menu="Segmentation / labeling > Seeded watershed using local minima as seeds (nsbatwm)")
 @time_slicer
 def local_minima_seeded_watershed(image:ImageData, spot_sigma:float=10, outline_sigma:float=0, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -325,7 +326,7 @@ def local_minima_seeded_watershed(image:ImageData, spot_sigma:float=10, outline_
     return watershed(outline_blurred, spots)
 
 
-@register_function(menu="Segmentation > Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
+@register_function(menu="Segmentation / labeling> Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
 @time_slicer
 def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=3, outline_sigma:float=0, minimum_intensity:float=500, viewer: napari.Viewer = None) -> LabelsData:
     """

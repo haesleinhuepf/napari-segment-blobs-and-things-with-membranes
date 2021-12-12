@@ -153,7 +153,7 @@ def percentile_filter(image: napari.types.ImageData, percentile : float = 50, ra
     return scipy.ndimage.percentile_filter(image.astype(float), percentile=percentile, size=int(radius * 2 + 1))
 
 
-@register_function(menu="Filtering / background removal > Whate top-hat (scipy, nsbatwm)")
+@register_function(menu="Filtering / background removal > White top-hat (scipy, nsbatwm)")
 @time_slicer
 def white_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
     return scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)

@@ -34,6 +34,12 @@ def napari_experimental_provide_function():
         gaussian_blur,
         subtract_background,
         threshold_otsu,
+        threshold_yen,
+        threshold_isodata,
+        threshold_li,
+        threshold_mean,
+        threshold_minimum,
+        threshold_triangle,
         binary_invert,
         split_touching_objects,
         connected_component_labeling,
@@ -54,6 +60,7 @@ def napari_experimental_provide_function():
         divide_images,
         invert_image
     ]
+
 
 def _sobel_3d(image):
     kernel = np.asarray([
@@ -124,6 +131,42 @@ def threshold_otsu(image:ImageData, viewer: napari.Viewer = None) -> LabelsData:
     binary_otsu = image > threshold
 
     return binary_otsu * 1
+
+
+@register_function(menu="Segmentation / binarization > Threshold (Yen et al 1995, scikit-image, nsbatwm)")
+@time_slicer
+def threshold_yen(image : napari.types.ImageData) -> napari.types.LabelsData:
+    return image > filters.threshold_yen(image)
+
+
+@register_function(menu="Segmentation / binarization > Threshold (Ridler et al 1978, scikit-image, nsbatwm)")
+@time_slicer
+def threshold_isodata(image : napari.types.ImageData) -> napari.types.LabelsData:
+    return image > filters.threshold_isodata(image)
+
+
+@register_function(menu="Segmentation / binarization > Threshold (Li et al 1993, scikit-image, nsbatwm)")
+@time_slicer
+def threshold_li(image : napari.types.ImageData) -> napari.types.LabelsData:
+    return image > filters.threshold_li(image)
+
+
+@register_function(menu="Segmentation / binarization > Threshold (Ridler et al 1978, scikit-image, nsbatwm)")
+@time_slicer
+def threshold_mean(image : napari.types.ImageData) -> napari.types.LabelsData:
+    return image > filters.threshold_mean(image)
+
+
+@register_function(menu="Segmentation / binarization > Threshold (Mean, scikit-image, nsbatwm)")
+@time_slicer
+def threshold_minimum(image : napari.types.ImageData) -> napari.types.LabelsData:
+    return image > filters.threshold_minimum(image)
+
+
+@register_function(menu="Segmentation / binarization > Threshold (Triangle method, Zack et al 1977, scikit-image, nsbatwm)")
+@time_slicer
+def threshold_triangle(image : napari.types.ImageData) -> napari.types.LabelsData:
+    return image > filters.threshold_triangle(image)
 
 
 @register_function(menu="Filtering / noise removal > Gaussian (scikit-image, nsbatwm)")

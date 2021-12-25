@@ -33,10 +33,12 @@ def test_something():
         divide_images,\
         invert_image
 
+    import numpy as np
+
     image = np.asarray([[0, 1, 2, 3],
                         [2, 0, 1, 3],
-                        [2, 0, 1, 3],
-                        [2, 0, 1, 3]])
+                        [2, 253, 1, 3],
+                        [255, 253, 1, 3]])
 
     for operation in [gaussian_blur,
         subtract_background,
@@ -50,7 +52,6 @@ def test_something():
         binary_invert,
         split_touching_objects,
         connected_component_labeling,
-        seeded_watershed,
         voronoi_otsu_labeling,
         gaussian_laplace,
         median_filter,
@@ -60,8 +61,14 @@ def test_something():
         black_tophat,
         white_tophat,
         morphological_gradient,
-        local_minima_seeded_watershed,
-        thresholded_local_minima_seeded_watershed,
+        local_minima_seeded_watershed]:
+
+        print(operation)
+
+        operation(image)
+
+    for operation in [
+        seeded_watershed,
         sum_images,
         multiply_images,
         divide_images,
@@ -69,4 +76,4 @@ def test_something():
 
         print(operation)
 
-        operation(image)
+        operation(image, image)

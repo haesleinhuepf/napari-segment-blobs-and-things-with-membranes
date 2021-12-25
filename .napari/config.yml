@@ -1,0 +1,11 @@
+
+# Add labels the plugin from the EDAM Bioimaging ontology
+labels:
+  ontology: EDAM-BIOIMAGING:alpha06
+  terms:
+  - Cell segmentation
+  - Smoothing
+  - Image thresholding
+  - Watershed segmentation
+  - Image denoising
+  - Fluorescence microscopy

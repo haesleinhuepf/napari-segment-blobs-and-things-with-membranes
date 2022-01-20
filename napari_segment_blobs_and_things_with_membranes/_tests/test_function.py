@@ -31,7 +31,8 @@ def test_something():
         sum_images,\
         multiply_images,\
         divide_images,\
-        invert_image
+        invert_image, \
+        skeletonize
 
     import numpy as np
 
@@ -61,7 +62,8 @@ def test_something():
         black_tophat,
         white_tophat,
         morphological_gradient,
-        local_minima_seeded_watershed]:
+        local_minima_seeded_watershed,
+        invert_image]:
 
         print(operation)
 
@@ -71,9 +73,10 @@ def test_something():
         seeded_watershed,
         sum_images,
         multiply_images,
-        divide_images,
-        invert_image]:
+        divide_images]:
 
         print(operation)
 
         operation(image, image)
+
+    skeletonize(image > 0)

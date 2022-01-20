@@ -58,7 +58,8 @@ def napari_experimental_provide_function():
         sum_images,
         multiply_images,
         divide_images,
-        invert_image
+        invert_image,
+        skeletonize
     ]
 
 

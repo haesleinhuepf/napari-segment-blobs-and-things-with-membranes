@@ -426,3 +426,13 @@ def invert_image(image: ImageData,
     from skimage import util
     return util.invert(image)
 
+
+
+@register_function(menu="Segmentation post-processing > Skeletonize (scikit-image, nsbatwm)")
+@time_slicer
+def skeletonize(image: ImageData,
+                                 viewer: napari.Viewer = None) -> ImageData:
+    from skimage import morphology
+    return morphology.skeletonize(image)
+
+

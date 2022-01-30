@@ -73,6 +73,12 @@ Takes a binary image and produces a label image with all separated objects label
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/connected_component_labeling.png)
 
+## Manual split and merge labels
+
+Split and merge labels in napari manually via the `Tools > Utilities menu`:
+
+![](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/split_and_merge_demo.gif)
+
 ----------------------------------
 
 This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [cookiecutter-napari-plugin] template.

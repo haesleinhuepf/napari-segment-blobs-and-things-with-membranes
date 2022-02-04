@@ -206,13 +206,13 @@ def percentile_filter(image: napari.types.ImageData, percentile : float = 50, ra
 @register_function(menu="Filtering / background removal > White top-hat (scipy, nsbatwm)")
 @time_slicer
 def white_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return scipy.ndimage.white_tophat(image.astype(float), size=radius * 2 + 1)
+    return scipy.ndimage.white_tophat(image.astype(float), size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / background removal > Black top-hat (scipy, nsbatwm)")
 @time_slicer
 def black_tophat(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return scipy.ndimage.black_tophat(image.astype(float), size=radius * 2 + 1)
+    return scipy.ndimage.black_tophat(image.astype(float), size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / background removal > Minimum (scipy, nsbatwm)")
@@ -230,7 +230,7 @@ def maximum_filter(image: napari.types.ImageData, radius: float = 2, viewer: nap
 @register_function(menu="Filtering / background removal > Morphological Gradient (scipy, nsbatwm)")
 @time_slicer
 def morphological_gradient(image: napari.types.ImageData, radius: float = 2, viewer: napari.Viewer = None) -> napari.types.ImageData:
-    return scipy.ndimage.morphological_gradient(image.astype(float), size=radius * 2 + 1)
+    return scipy.ndimage.morphological_gradient(image.astype(float), size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / background removal > Rolling ball (scikit-image, nsbatwm)")

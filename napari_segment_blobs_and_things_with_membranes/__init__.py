@@ -142,37 +142,37 @@ def threshold_otsu(image:ImageData, viewer: napari.Viewer = None) -> LabelsData:
 
 @register_function(menu="Segmentation / binarization > Threshold (Yen et al 1995, scikit-image, nsbatwm)")
 @time_slicer
-def threshold_yen(image : napari.types.ImageData) -> napari.types.LabelsData:
+def threshold_yen(image : napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
     return image > filters.threshold_yen(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Ridler et al 1978, scikit-image, nsbatwm)")
 @time_slicer
-def threshold_isodata(image : napari.types.ImageData) -> napari.types.LabelsData:
+def threshold_isodata(image : napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
     return image > filters.threshold_isodata(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Li et al 1993, scikit-image, nsbatwm)")
 @time_slicer
-def threshold_li(image : napari.types.ImageData) -> napari.types.LabelsData:
+def threshold_li(image : napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
     return image > filters.threshold_li(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Ridler et al 1978, scikit-image, nsbatwm)")
 @time_slicer
-def threshold_mean(image : napari.types.ImageData) -> napari.types.LabelsData:
+def threshold_mean(image : napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
     return image > filters.threshold_mean(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Mean, scikit-image, nsbatwm)")
 @time_slicer
-def threshold_minimum(image : napari.types.ImageData) -> napari.types.LabelsData:
+def threshold_minimum(image : napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
     return image > filters.threshold_minimum(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Triangle method, Zack et al 1977, scikit-image, nsbatwm)")
 @time_slicer
-def threshold_triangle(image : napari.types.ImageData) -> napari.types.LabelsData:
+def threshold_triangle(image : napari.types.ImageData, viewer: napari.Viewer = None) -> napari.types.LabelsData:
     return image > filters.threshold_triangle(image)
 
 

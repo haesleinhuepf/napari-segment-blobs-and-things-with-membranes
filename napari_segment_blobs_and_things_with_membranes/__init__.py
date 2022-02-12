@@ -45,6 +45,7 @@ def napari_experimental_provide_function():
         connected_component_labeling,
         seeded_watershed,
         voronoi_otsu_labeling,
+        gauss_otsu_labeling,
         gaussian_laplace,
         median_filter,
         maximum_filter,
@@ -301,7 +302,8 @@ def expand_labels(label_image: LabelsData, distance: float = 1, viewer: napari.V
 @register_function(menu="Segmentation / labeling > Voronoi-Otsu-labeling (nsbatwm)")
 @time_slicer
 def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma: float = 2, viewer: napari.Viewer = None) -> LabelsData:
-    """
+    """Voronoi-Otsu-Labeling
+
     The two sigma parameters allow tuning the segmentation result. The first sigma controls how close detected cells
     can be (spot_sigma) and the second controls how precise segmented objects are outlined (outline_sigma). Under the
     hood, this filter applies two Gaussian blurs, spot detection, Otsu-thresholding and Voronoi-labeling. The
@@ -329,6 +331,33 @@ def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma:
     # start from remaining spots and flood binary image with labels
     labeled_spots = label(remaining_spots)
     labels = watershed(binary_otsu, labeled_spots, mask=binary_otsu)
+
+    return labels
+
+
+@register_function(menu="Segmentation / labeling > Gauss-Otsu-labeling (nsbatwm)")
+@time_slicer
+def gauss_otsu_labeling(image:ImageData, outline_sigma: float = 2, viewer: napari.Viewer = None) -> LabelsData:
+    """Gauss-Otsu-Labeling
+
+    The outline_sigma parameter allows tuning how precise segmented objects are outlined. Under the
+    hood, this filter applies a Gaussian blur, Otsu-thresholding and connected component labeling.
+
+    See also
+    --------
+    .. [0] https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/demo/segmentation/gauss_otsu_labeling.ipynb
+    """
+    image = np.asarray(image)
+
+    # blur
+    blurred_outline = gaussian(image, outline_sigma)
+
+    # threshold
+    threshold = sk_threshold_otsu(blurred_outline)
+    binary_otsu = blurred_outline > threshold
+
+    # connected component labeling
+    labels = label(binary_otsu)
 
     return labels
 

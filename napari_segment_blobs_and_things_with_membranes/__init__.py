@@ -465,10 +465,17 @@ def invert_image(image: ImageData,
 
 @register_function(menu="Segmentation post-processing > Skeletonize (scikit-image, nsbatwm)")
 @time_slicer
-def skeletonize(image: ImageData,
-                                 viewer: napari.Viewer = None) -> ImageData:
+def skeletonize(image: LabelsData,
+                                 viewer: napari.Viewer = None) -> LabelsData:
     from skimage import morphology
-    return morphology.skeletonize(image)
+    if image.max() == 1:
+        return morphology.skeletonize(image)
+    else:
+        result = np.zeros(image.shape)
+        for i in range(1, image.max() + 1):
+            skeleton = morphology.skeletonize(image == i)
+            result = skeleton * i + result
+        return result.astype(int)
 
 
 @register_function(menu="Utilities > Manually merge labels (nsbatwm)")

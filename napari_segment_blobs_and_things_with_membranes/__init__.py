@@ -409,7 +409,7 @@ def local_minima_seeded_watershed(image:ImageData, spot_sigma:float=10, outline_
     return watershed(outline_blurred, spots)
 
 
-@register_function(menu="Segmentation / labeling> Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
+@register_function(menu="Segmentation / labeling > Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
 @time_slicer
 def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=3, outline_sigma:float=0, minimum_intensity:float=500, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -430,7 +430,7 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=
     # filter labels with low intensity
     new_label_indices, _, _ = relabel_sequential((np.asarray(intensities) > minimum_intensity) * np.arange(labels.max()))
     new_label_indices = np.insert(new_label_indices, 0, 0)
-    new_labels = np.take(np.asarray(new_label_indices, np.uint8), labels)
+    new_labels = np.take(np.asarray(new_label_indices, np.uint32), labels)
 
     return new_labels
 

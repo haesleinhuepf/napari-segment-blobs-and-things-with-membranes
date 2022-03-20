@@ -8,11 +8,20 @@
 [![Development Status](https://img.shields.io/pypi/status/napari-segment-blobs-and-things-with-membranes.svg)](https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-segment-blobs-and-things-with-membranes)](https://napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes)
 
-A plugin based on scikit-image for segmenting nuclei and cells based on fluorescent microscopy images with high intensity in nuclei and/or membranes. 
-The available functions and their user interface based on [magicgui](https://napari.org/magicgui/) are shown below. You can also call these functions
-as shown in [the demo notebook](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/blob/main/docs/demo.ipynb).
+This napari-plugin is based on scikit-image and allows segmenting nuclei and cells based on fluorescence microscopy images with high intensity in nuclei and/or membranes.
 
-## Voronoi-Otsu-Labeling
+## Usage
+
+This plugin populates image processing operations to the `Tools` menu in napari.
+You can recognize them with their suffix `(nsbatwm)` in brackets.
+Furthermore, it can be used from the [napari-assistant](https://www.napari-hub.org/plugins/napari-assistant) graphical user interface. 
+Therefore, just click the menu `Tools > Utilities > Assistant (na)` or run `naparia` from the command line.
+
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/tools_menu_screenshot.png)
+
+You can also call these functions as shown in [the demo notebook](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/blob/main/docs/demo.ipynb).
+
+### Voronoi-Otsu-Labeling
 
 This algorithm uses [Otsu's thresholding method](https://ieeexplore.ieee.org/document/4310076) in combination with 
 [Gaussian blur](https://scikit-image.org/docs/dev/api/skimage.filters.html#skimage.filters.gaussian) and a 
@@ -23,14 +32,14 @@ This implementation aims to be similar to [Voronoi-Otsu-Labeling in clesperanto]
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/voronoi_otsu_labeling.png)
 
-## Seeded Watershed
+### Seeded Watershed
 
 Starting from an image showing high-intensity membranes and a seed-image where objects have been labeled (e.g. using Voronoi-Otsu-Labeling),
 objects are labeled that are constrained by the membranes.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/seeded_watershed.png)
 
-## Seeded Watershed using local minima as starting points
+### Seeded Watershed using local minima as starting points
 
 Similar to the Seeded Watershed and Voronoi-Otsu-Labeling explained above, you can use this tool to segment an image
 showing membranes without an additional image showing nuclei. The two sigma parameters allow to fine tune how close 
@@ -38,42 +47,42 @@ objects can be and how precise their boundaries are detected.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/local_minima_seeded_watershed.png)
 
-## Gaussian blur
+### Gaussian blur
 
 Applies a [Gaussian blur](https://scikit-image.org/docs/dev/api/skimage.filters.html#skimage.filters.gaussian) to an
 image. This might be useful for denoising, e.g. before applying the Threshold-Otsu method.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/gaussian_blur.png)
 
-## Subtract background
+### Subtract background
 
 Subtracts background using [scikit-image's rolling-ball algorithm](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rolling_ball.html). 
 This might be useful, for example to make intensity of membranes more similar in different regions of an image.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/subtract_background.png)
 
-## Threshold Otsu
+### Threshold Otsu
 
 Binarizes an image using [scikit-image's threshold Otsu algorithm](https://scikit-image.org/docs/dev/auto_examples/segmentation/plot_thresholding.html), also known as 
 [Otsu's method](https://ieeexplore.ieee.org/document/4310076).
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/threshold_otsu.png)
 
-## Split touching objects (formerly known as binary watershed).
+### Split touching objects (formerly known as binary watershed).
 
 In case objects stick together after thresholding, this tool might help.
 It aims to deliver similar results as [ImageJ's watershed implementation](https://imagej.nih.gov/ij/docs/menus/process.html#watershed).
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/binary_watershed.png)
 
-## Connected component labeling
+### Connected component labeling
 
 Takes a binary image and produces a label image with all separated objects labeled differently. Under the hood, it uses
 [scikit-image's label function](https://scikit-image.org/docs/dev/auto_examples/segmentation/plot_label.html).
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/connected_component_labeling.png)
 
-## Manual split and merge labels
+### Manual split and merge labels
 
 Split and merge labels in napari manually via the `Tools > Utilities menu`:
 
@@ -85,14 +94,10 @@ This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [c
 
 ## Installation
 
-Download, unzip and install napari from its [github releases page](https://github.com/napari/napari/releases/tag/v0.4.11):
-![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/napari_download.png)
+You can also install `napari-segment-blobs-and-things-with-membranes` using `conda` and `pip`.
+If you have never used `conda` before, please go through [this tutorial](https://biapol.github.io/blog/johannes_mueller/anaconda_getting_started/) first.
 
-Afterwards, go to the menu `Plugins > Install/uninstall plugins...` and click on the install button next to `napari-segment-blobs-and-things-with-membranes`:
-![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/napari_plugin_installer.png)
-
-You can also install `napari-segment-blobs-and-things-with-membranes` via [pip]:
-
+    conda install -c conda-forge napari
     pip install napari-segment-blobs-and-things-with-membranes
 
 ## Contributing

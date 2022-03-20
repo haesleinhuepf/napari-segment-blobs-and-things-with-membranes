@@ -1,5 +1,5 @@
 
-__version__ = "0.2.16"
+__version__ = "0.2.19"
 __common_alias__ = "nsbatwm"
 
 from napari.types import ImageData, LabelsData
@@ -45,6 +45,7 @@ def napari_experimental_provide_function():
         connected_component_labeling,
         seeded_watershed,
         voronoi_otsu_labeling,
+        gauss_otsu_labeling,
         gaussian_laplace,
         median_filter,
         maximum_filter,
@@ -301,7 +302,8 @@ def expand_labels(label_image: LabelsData, distance: float = 1, viewer: napari.V
 @register_function(menu="Segmentation / labeling > Voronoi-Otsu-labeling (nsbatwm)")
 @time_slicer
 def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma: float = 2, viewer: napari.Viewer = None) -> LabelsData:
-    """
+    """Voronoi-Otsu-Labeling
+
     The two sigma parameters allow tuning the segmentation result. The first sigma controls how close detected cells
     can be (spot_sigma) and the second controls how precise segmented objects are outlined (outline_sigma). Under the
     hood, this filter applies two Gaussian blurs, spot detection, Otsu-thresholding and Voronoi-labeling. The
@@ -329,6 +331,33 @@ def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma:
     # start from remaining spots and flood binary image with labels
     labeled_spots = label(remaining_spots)
     labels = watershed(binary_otsu, labeled_spots, mask=binary_otsu)
+
+    return labels
+
+
+@register_function(menu="Segmentation / labeling > Gauss-Otsu-labeling (nsbatwm)")
+@time_slicer
+def gauss_otsu_labeling(image:ImageData, outline_sigma: float = 2, viewer: napari.Viewer = None) -> LabelsData:
+    """Gauss-Otsu-Labeling
+
+    The outline_sigma parameter allows tuning how precise segmented objects are outlined. Under the
+    hood, this filter applies a Gaussian blur, Otsu-thresholding and connected component labeling.
+
+    See also
+    --------
+    .. [0] https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/demo/segmentation/gauss_otsu_labeling.ipynb
+    """
+    image = np.asarray(image)
+
+    # blur
+    blurred_outline = gaussian(image, outline_sigma)
+
+    # threshold
+    threshold = sk_threshold_otsu(blurred_outline)
+    binary_otsu = blurred_outline > threshold
+
+    # connected component labeling
+    labels = label(binary_otsu)
 
     return labels
 
@@ -380,7 +409,7 @@ def local_minima_seeded_watershed(image:ImageData, spot_sigma:float=10, outline_
     return watershed(outline_blurred, spots)
 
 
-@register_function(menu="Segmentation / labeling> Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
+@register_function(menu="Segmentation / labeling > Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
 @time_slicer
 def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=3, outline_sigma:float=0, minimum_intensity:float=500, viewer: napari.Viewer = None) -> LabelsData:
     """
@@ -401,7 +430,7 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma:float=
     # filter labels with low intensity
     new_label_indices, _, _ = relabel_sequential((np.asarray(intensities) > minimum_intensity) * np.arange(labels.max()))
     new_label_indices = np.insert(new_label_indices, 0, 0)
-    new_labels = np.take(np.asarray(new_label_indices, np.uint8), labels)
+    new_labels = np.take(np.asarray(new_label_indices, np.uint32), labels)
 
     return new_labels
 
@@ -436,10 +465,17 @@ def invert_image(image: ImageData,
 
 @register_function(menu="Segmentation post-processing > Skeletonize (scikit-image, nsbatwm)")
 @time_slicer
-def skeletonize(image: ImageData,
-                                 viewer: napari.Viewer = None) -> ImageData:
+def skeletonize(image: LabelsData,
+                                 viewer: napari.Viewer = None) -> LabelsData:
     from skimage import morphology
-    return morphology.skeletonize(image)
+    if image.max() == 1:
+        return morphology.skeletonize(image)
+    else:
+        result = np.zeros(image.shape)
+        for i in range(1, image.max() + 1):
+            skeleton = morphology.skeletonize(image == i)
+            result = skeleton * i + result
+        return result.astype(int)
 
 
 @register_function(menu="Utilities > Manually merge labels (nsbatwm)")

@@ -17,7 +17,8 @@ def test_something():
         split_touching_objects,\
         connected_component_labeling,\
         seeded_watershed,\
-        voronoi_otsu_labeling,\
+        voronoi_otsu_labeling, \
+        gauss_otsu_labeling,\
         gaussian_laplace,\
         median_filter,\
         maximum_filter,\
@@ -54,6 +55,7 @@ def test_something():
         split_touching_objects,
         connected_component_labeling,
         voronoi_otsu_labeling,
+        gauss_otsu_labeling,
         gaussian_laplace,
         median_filter,
         maximum_filter,

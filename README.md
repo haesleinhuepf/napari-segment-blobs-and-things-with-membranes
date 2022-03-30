@@ -94,7 +94,7 @@ This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [c
 
 ## Installation
 
-You can also install `napari-segment-blobs-and-things-with-membranes` using `conda` and `pip`.
+You can install `napari-segment-blobs-and-things-with-membranes` using `conda` and `pip`.
 If you have never used `conda` before, please go through [this tutorial](https://biapol.github.io/blog/johannes_mueller/anaconda_getting_started/) first.
 
     conda install -c conda-forge napari

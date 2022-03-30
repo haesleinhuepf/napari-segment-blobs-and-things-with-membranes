@@ -484,7 +484,7 @@ def Manually_merge_labels(labels_layer: napari.layers.Labels, points_layer: napa
         points_layer = viewer.add_points([])
         points_layer.mode = 'ADD'
         return
-    labels = labels_layer.data
+    labels = np.asarray(labels_layer.data)
     points = points_layer.data
 
     label_ids = [labels.item(tuple([int(j) for j in i])) for i in points]
@@ -505,7 +505,7 @@ def Manually_split_labels(labels_layer: napari.layers.Labels, points_layer: napa
         points_layer.mode = 'ADD'
         return
 
-    labels = labels_layer.data
+    labels = np.asarray(labels_layer.data)
     points = points_layer.data
 
     label_ids = [labels.item(tuple([int(j) for j in i])) for i in points]

@@ -364,7 +364,7 @@ def gauss_otsu_labeling(image:ImageData, outline_sigma: float = 2, viewer: napar
     return labels
 
 
-@register_function(menu="Segmentation / labeling > Seeded watershed (scikit-image, nsbatwm)")
+@register_function(menu="Segmentation post-processing > Seeded watershed (scikit-image, nsbatwm)")
 @time_slicer
 def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData, viewer: napari.Viewer = None) -> LabelsData:
     """

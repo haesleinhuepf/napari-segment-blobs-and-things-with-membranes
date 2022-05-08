@@ -264,7 +264,7 @@ def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: boo
     """
     if exclude_on_edges:
         # processing the image, which is not a timelapse
-        return label(clear_border(np.asarray(binary_image)))
+        return remove_labels_on_edges(label(np.asarray(binary_image)))
 
     else:
         return label(np.asarray(binary_image))
@@ -281,7 +281,9 @@ def remove_labels_on_edges(label_image: LabelsData, viewer: napari.Viewer = None
     ..[0] https://scikit-image.org/docs/stable/api/skimage.segmentation.html#skimage.segmentation.clear_border
     """
 
-    return clear_border(np.asarray(label_image))
+    result = clear_border(np.asarray(label_image))
+    relabeled_result, _, _ = relabel_sequential(result)
+    return relabeled_result
 
 
 @register_function(menu="Segmentation post-processing > Expand labels (scikit-image, nsbatwm)")

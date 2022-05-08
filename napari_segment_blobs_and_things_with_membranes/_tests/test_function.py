@@ -1,6 +1,7 @@
 # from napari_segment_blobs_and_things_with_membranes import threshold, image_arithmetic
 
 # add your tests here...
+import numpy as np
 
 
 def test_something():
@@ -82,3 +83,50 @@ def test_something():
         operation(image, image)
 
     skeletonize(image > 0)
+
+def test_remove_labels_on_edges_sequential_labeling():
+    image = np.asarray([
+        [1,2,3],
+        [4,5,6],
+        [7,7,7],
+    ])
+
+    reference = np.asarray([
+        [0,0,0],
+        [0,1,0],
+        [0,0,0],
+    ])
+
+    from napari_segment_blobs_and_things_with_membranes import remove_labels_on_edges
+    result = remove_labels_on_edges(image)
+
+    print(result)
+    print(reference)
+
+    assert np.array_equal(result, reference)
+
+def test_connected_component_labeling_sequential_labeling():
+    image = np.asarray([
+        [1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0],
+        [1, 0, 1, 0, 1],
+        [0, 0, 0, 0, 0],
+        [1, 0, 1, 0, 1],
+    ])
+
+    reference = np.asarray([
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+        [0,0,1,0,0],
+        [0,0,0,0,0],
+        [0,0,0,0,0],
+    ])
+
+    from napari_segment_blobs_and_things_with_membranes import connected_component_labeling
+    result = connected_component_labeling(image, exclude_on_edges=True)
+
+    print(result)
+    print(reference)
+
+    assert np.array_equal(result, reference)
+

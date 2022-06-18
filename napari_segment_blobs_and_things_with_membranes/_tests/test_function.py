@@ -34,7 +34,8 @@ def test_something():
         multiply_images,\
         divide_images,\
         invert_image, \
-        skeletonize
+        skeletonize, \
+        rescale
 
     import numpy as np
 
@@ -66,7 +67,8 @@ def test_something():
         white_tophat,
         morphological_gradient,
         local_minima_seeded_watershed,
-        invert_image]:
+        invert_image,
+        rescale]:
 
         print(operation)
 

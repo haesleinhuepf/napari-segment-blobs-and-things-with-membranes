@@ -62,7 +62,8 @@ def napari_experimental_provide_function():
         invert_image,
         skeletonize,
         Manually_merge_labels,
-        Manually_split_labels
+        Manually_split_labels,
+        rescale
     ]
 
 
@@ -478,6 +479,40 @@ def skeletonize(image: LabelsData,
             skeleton = morphology.skeletonize(image == i)
             result = skeleton * i + result
         return result.astype(int)
+
+
+@register_function(menu="Transform / project > Rescale (scikit-image, nsbatwm)")
+@time_slicer
+def rescale(image: ImageData,
+            scale_x: float = 1.0,
+            scale_y: float = 1.0,
+            scale_z: float = 1.0) -> ImageData:
+    """
+    Rescale an image by a given set of scale factors.
+
+    Parameters
+    ----------
+    image : ImageData
+    scale_x : float, optional
+        factor by which to scale the image along the x axis. The default is 1.0.
+    scale_y : float, optional
+        factor by which to scale the image along the y dimension. The default is 1.0.
+    scale_z : float, optional
+        factor by which to scale the image along the z dimension. The default is 1.0.
+    Returns
+    -------
+    ImageData
+    """
+    from skimage import transform
+
+    if len(image.shape) == 3:
+        scale_factors = np.asarray([scale_z, scale_y, scale_x])
+    elif len(image.shape) == 2:
+        scale_factors = np.asarray([scale_y, scale_x])
+    else:
+        raise ValueError("Rescaling only supported for 2D and 3D images")
+
+    return transform.rescale(image, scale=scale_factors, preserve_range=True)
 
 
 @register_function(menu="Utilities > Manually merge labels (nsbatwm)")

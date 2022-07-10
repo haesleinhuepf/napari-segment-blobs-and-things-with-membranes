@@ -485,9 +485,14 @@ def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma:
     thresholded binary image is flooded using the Voronoi approach starting from the found local maxima. Noise-removal
     sigma for spot detection and thresholding can be configured separately.
 
+    This allows segmenting connected objects such as not to dense nuclei.
+    If the nuclei are too dense, consider using stardist [1] or cellpose [2].
+
     See also
     --------
     .. [0] https://github.com/clEsperanto/pyclesperanto_prototype/blob/master/demo/segmentation/voronoi_otsu_labeling.ipynb
+    .. [1] https://www.napari-hub.org/plugins/stardist-napari
+    .. [2] https://www.napari-hub.org/plugins/cellpose-napari
     """
     image = np.asarray(image)
 

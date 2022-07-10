@@ -1,5 +1,5 @@
 
-__version__ = "0.2.22"
+__version__ = "0.3.0"
 __common_alias__ = "nsbatwm"
 
 from napari.types import ImageData, LabelsData

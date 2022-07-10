@@ -93,11 +93,16 @@ def _sobel_3d(image):
 @time_slicer
 def split_touching_objects(binary:LabelsData, sigma: float = 3.5) -> LabelsData:
     """
-    Takes a binary image and draws cuts in the objects similar to the ImageJ watershed algorithm.
+    Takes a binary image and draws cuts in the objects similar to the ImageJ watershed algorithm [1].
+
+    This allows cutting connected objects such as not to dense nuclei. If the nuclei are too dense,
+    consider using stardist [2] or cellpose [3].
 
     See also
     --------
-    .. [0] https://imagej.nih.gov/ij/docs/menus/process.html#watershed
+    .. [1] https://imagej.nih.gov/ij/docs/menus/process.html#watershed
+    .. [2] https://www.napari-hub.org/plugins/stardist-napari
+    .. [3] https://www.napari-hub.org/plugins/cellpose-napari
     """
     binary = np.asarray(binary)
 
@@ -144,36 +149,128 @@ def threshold_otsu(image:ImageData) -> LabelsData:
 @register_function(menu="Segmentation / binarization > Threshold (Yen et al 1995, scikit-image, nsbatwm)")
 @time_slicer
 def threshold_yen(image : napari.types.ImageData) -> napari.types.LabelsData:
+    """
+    Binarize an image according to Yen's method.
+
+    Parameters
+    ----------
+    image: Image
+
+    See Also
+    --------
+    ..[0] https://imagej.net/plugins/auto-threshold#yen
+
+    Returns
+    -------
+    binary_image: napari.types.LabelsData
+    """
     return image > filters.threshold_yen(image)
 
 
-@register_function(menu="Segmentation / binarization > Threshold (Ridler et al 1978, scikit-image, nsbatwm)")
+@register_function(menu="Segmentation / binarization > Threshold (Isodata, Ridler et al 1978, scikit-image, nsbatwm)")
 @time_slicer
 def threshold_isodata(image : napari.types.ImageData) -> napari.types.LabelsData:
+    """
+    Binarize an image according to the IsoData / Ridler's method.
+    The method is similar to ImageJ's "default" threshold.
+
+    Parameters
+    ----------
+    image: Image
+
+    See Also
+    --------
+    ..[0] https://imagej.net/plugins/auto-threshold#isodata
+    ..[1] https://ieeexplore.ieee.org/document/4310039
+
+    Returns
+    -------
+    binary_image: napari.types.LabelsData
+    """
     return image > filters.threshold_isodata(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Li et al 1993, scikit-image, nsbatwm)")
 @time_slicer
 def threshold_li(image : napari.types.ImageData) -> napari.types.LabelsData:
+    """
+    Binarize an image according to Li's method method.
+
+    Parameters
+    ----------
+    image: Image
+
+    See Also
+    --------
+    ..[0] https://imagej.net/plugins/auto-threshold#li
+
+    Returns
+    -------
+    binary_image: napari.types.LabelsData
+    """
     return image > filters.threshold_li(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Ridler et al 1978, scikit-image, nsbatwm)")
 @time_slicer
 def threshold_mean(image : napari.types.ImageData) -> napari.types.LabelsData:
+    """
+    Binarize an image according to the Mean method.
+
+    Parameters
+    ----------
+    image: Image
+
+    See Also
+    --------
+    ..[0] https://imagej.net/plugins/auto-threshold#mean
+
+    Returns
+    -------
+    binary_image: napari.types.LabelsData
+    """
     return image > filters.threshold_mean(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Mean, scikit-image, nsbatwm)")
 @time_slicer
 def threshold_minimum(image : napari.types.ImageData) -> napari.types.LabelsData:
+    """
+    Binarize an image according to the Minimum method.
+
+    Parameters
+    ----------
+    image: Image
+
+    See Also
+    --------
+    ..[0] https://imagej.net/plugins/auto-threshold#minimum
+
+    Returns
+    -------
+    binary_image: napari.types.LabelsData
+    """
     return image > filters.threshold_minimum(image)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Triangle method, Zack et al 1977, scikit-image, nsbatwm)")
 @time_slicer
 def threshold_triangle(image : napari.types.ImageData) -> napari.types.LabelsData:
+    """
+    Binarize an image according to the Triangle method.
+
+    Parameters
+    ----------
+    image: Image
+
+    See Also
+    --------
+    ..[0] https://imagej.net/plugins/auto-threshold#triangle
+
+    Returns
+    -------
+    binary_image: napari.types.LabelsData
+    """
     return image > filters.threshold_triangle(image)
 
 
@@ -189,54 +286,127 @@ def gaussian_blur(image:ImageData, sigma: float = 1) -> ImageData:
 @register_function(menu="Filtering / edge enhancement > Gaussian Laplace (scipy, nsbatwm)")
 @time_slicer
 def gaussian_laplace(image: napari.types.ImageData, sigma: float = 2) -> napari.types.ImageData:
+    """
+    Apply Laplace filter for edge detection / edge enhancement after applying a Gaussian-blur
+
+    Parameters
+    ----------
+    image: array-like
+        Image to detect edges in
+    sigma: float
+        The filter will be applied with this specified Gaussian-blur sigma
+
+    Returns
+    -------
+    array-like
+
+    See also
+    --------
+    .. [1] https://en.wikipedia.org/wiki/Laplace_operator
+    """
     return scipy.ndimage.gaussian_laplace(image.astype(float), sigma)
 
 
 @register_function(menu="Filtering / noise removal > Median (scipy, nsbatwm)")
 @time_slicer
 def median_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    The median-filter allows removing noise from images. While locally averaging intensity, it
+    is an edge-preserving filter.
+
+    It is equal to a percentile-filter with percentile==50.
+    In case applying the filter takes to much time, consider using a Gaussian blur instead.
+    """
     return scipy.ndimage.median_filter(image.astype(float), size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / noise removal > Percentile (scipy, nsbatwm)")
 @time_slicer
 def percentile_filter(image: napari.types.ImageData, percentile : float = 50, radius: float = 2) -> napari.types.ImageData:
+    """The percentile filter is similar to the median-filter but it allows specifying the percentile.
+    The percentile-filter with percentile==50 is equal to the median-filter.
+    """
     return scipy.ndimage.percentile_filter(image.astype(float), percentile=percentile, size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / background removal > White top-hat (scipy, nsbatwm)")
 @time_slicer
 def white_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    The white top-hat filter removes bright regions from an image showing black islands.
+
+    In the context of fluorescence microscopy, it allows removing intensity resulting from out-of-focus light.
+    """
     return scipy.ndimage.white_tophat(image.astype(float), size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / background removal > Black top-hat (scipy, nsbatwm)")
 @time_slicer
 def black_tophat(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    The black top-hat filter removes bright regions from an image showing black islands.
+    """
     return scipy.ndimage.black_tophat(image.astype(float), size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / background removal > Minimum (scipy, nsbatwm)")
 @time_slicer
 def minimum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Local minimum filter
+
+    Can be used for noise and background removal.
+    """
     return scipy.ndimage.minimum_filter(image.astype(float), size=radius * 2 + 1)
 
 
 @register_function(menu="Filtering / background removal > Maximum (scipy, nsbatwm)")
 @time_slicer
 def maximum_filter(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Local maximum filter
+
+    In the context of cell segmentation it can be used to make membranes wider
+    and close small gaps of insufficient staining.
+    """
     return scipy.ndimage.maximum_filter(image.astype(float), size=radius * 2 + 1)
 
 
-@register_function(menu="Filtering / background removal > Morphological Gradient (scipy, nsbatwm)")
+@register_function(menu="Filtering / edge enhancement > Morphological Gradient (scipy, nsbatwm)")
 @time_slicer
 def morphological_gradient(image: napari.types.ImageData, radius: float = 2) -> napari.types.ImageData:
+    """
+    Apply gradient filter (similar to the Sobel operator) for edge detection / edge enhancement.
+    This is similar to applying a Gaussian-blur to an image and afterwards the gradient operator
+
+    Parameters
+    ----------
+    image: array-like
+        Image to detect edges in
+    radius: float
+        The filter will be applied with a kernel size of (radius * 2 + 1)
+
+    Returns
+    -------
+    array-like
+
+    See also
+    --------
+    .. [1] https://en.wikipedia.org/wiki/Morphological_gradient
+    """
     return scipy.ndimage.morphological_gradient(image.astype(float), size=int(radius * 2 + 1))
 
 
 @register_function(menu="Filtering / background removal > Rolling ball (scikit-image, nsbatwm)")
 @time_slicer
 def subtract_background(image:ImageData, rolling_ball_radius: float = 5) -> ImageData:
+    """
+    Subtract background in an image using the rolling-ball algorithm.
+
+    See also
+    --------
+    ..[0] https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_rolling_ball.html
+    """
     background = rolling_ball(image, radius = rolling_ball_radius)
     return image - background
 
@@ -255,7 +425,8 @@ def binary_invert(binary_image:LabelsData) -> LabelsData:
 def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: bool = False,
                                  viewer: napari.Viewer = None) -> LabelsData:
     """
-    Takes a binary image and produces a label image with all separated objects labeled differently.
+    Takes a binary image and produces a label image with all separated objects labeled with
+    different integer numbers.
 
     Parameters
     ----------
@@ -275,6 +446,7 @@ def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: boo
 def remove_labels_on_edges(label_image: LabelsData) -> LabelsData:
     """
     Takes a label image and removes objects that touch the image border.
+    The remaining labels are relabeled sequentially.
 
     See also
     --------
@@ -291,7 +463,7 @@ def remove_labels_on_edges(label_image: LabelsData) -> LabelsData:
 def expand_labels(label_image: LabelsData, distance: float = 1) -> LabelsData:
     """
     Takes a label image and makes labels larger up to a given radius (distance).
-    Labels will not overwrite each other while expanding.
+    Labels will not overwrite each other while expanding. This operation is also known as label dilation.
 
     See also
     --------
@@ -304,7 +476,8 @@ def expand_labels(label_image: LabelsData, distance: float = 1) -> LabelsData:
 @register_function(menu="Segmentation / labeling > Voronoi-Otsu-labeling (nsbatwm)")
 @time_slicer
 def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma: float = 2) -> LabelsData:
-    """Voronoi-Otsu-Labeling
+    """Voronoi-Otsu-Labeling is a segmentation algorithm for blob-like structures such as nuclei and
+    granules with high signal intensity on low-intensity background.
 
     The two sigma parameters allow tuning the segmentation result. The first sigma controls how close detected cells
     can be (spot_sigma) and the second controls how precise segmented objects are outlined (outline_sigma). Under the
@@ -340,7 +513,8 @@ def voronoi_otsu_labeling(image:ImageData, spot_sigma: float = 2, outline_sigma:
 @register_function(menu="Segmentation / labeling > Gauss-Otsu-labeling (nsbatwm)")
 @time_slicer
 def gauss_otsu_labeling(image:ImageData, outline_sigma: float = 2) -> LabelsData:
-    """Gauss-Otsu-Labeling
+    """Gauss-Otsu-Labeling can be used to segment objects such as nuclei with bright intensity on
+    low intensity background images.
 
     The outline_sigma parameter allows tuning how precise segmented objects are outlined. Under the
     hood, this filter applies a Gaussian blur, Otsu-thresholding and connected component labeling.
@@ -368,7 +542,7 @@ def gauss_otsu_labeling(image:ImageData, outline_sigma: float = 2) -> LabelsData
 @time_slicer
 def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsData:
     """
-    Takes a image with brigh (high intensity) membranes and an image with labeled objects such as nuclei.
+    Takes a image with bright (high intensity) membranes and an image with labeled objects such as nuclei.
     The latter serves as seeds image for a watershed labeling.
 
     See also
@@ -386,7 +560,7 @@ def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsDa
 @time_slicer
 def local_minima_seeded_watershed(image:ImageData, spot_sigma: float = 10, outline_sigma: float = 0) -> LabelsData:
     """
-    Segment cells in images with marked membranes.
+    Segment cells in images with fluorescently marked membranes.
 
     The two sigma parameters allow tuning the segmentation result. The first sigma controls how close detected cells
     can be (spot_sigma) and the second controls how precise segmented objects are outlined (outline_sigma). Under the
@@ -438,37 +612,49 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma: float
 
 @register_function(menu="Image math > Sum images (numpy, nsbatwm)", factor1={'min': -1000000, 'max': 1000000}, factor2={'min': -1000000, 'max': 1000000})
 @time_slicer
-def sum_images(image1: ImageData, image2: ImageData, factor1: float = 1, factor2: float = 1,
-                                 viewer: napari.Viewer = None) -> ImageData:
+def sum_images(image1: ImageData, image2: ImageData, factor1: float = 1, factor2: float = 1) -> ImageData:
+    """Add two images"""
     return image1 * factor1 + image2 * factor2
 
 
 @register_function(menu="Image math > Multiply images (numpy, nsbatwm)")
 @time_slicer
-def multiply_images(image1: ImageData, image2: ImageData,
-                                 viewer: napari.Viewer = None) -> ImageData:
+def multiply_images(image1: ImageData, image2: ImageData) -> ImageData:
+    """Multiply two images"""
     return image1 * image2
 
 
 @register_function(menu="Image math > Divide images (numpy, nsbatwm)")
 @time_slicer
-def divide_images(image1: ImageData, image2: ImageData,
-                                 viewer: napari.Viewer = None) -> ImageData:
+def divide_images(image1: ImageData, image2: ImageData) -> ImageData:
+    """Divide one image by another"""
     return image1 / image2
 
 
 @register_function(menu="Image math > Invert image (scikit-image, nsbatwm)")
 @time_slicer
-def invert_image(image: ImageData,
-                                 viewer: napari.Viewer = None) -> ImageData:
+def invert_image(image: ImageData) -> ImageData:
+    """Invert an image. The excat math behind depends on the image type.
+
+    See also
+    --------
+    .. [0] https://scikit-image.org/docs/dev/api/skimage.util.html?highlight=invert#skimage.util.invert
+    """
     from skimage import util
     return util.invert(image)
 
 
 @register_function(menu="Segmentation post-processing > Skeletonize (scikit-image, nsbatwm)")
 @time_slicer
-def skeletonize(image: LabelsData,
-                                 viewer: napari.Viewer = None) -> LabelsData:
+def skeletonize(image: LabelsData) -> LabelsData:
+    """
+    Skeletonize labeled objects in an image. This can be useful to reduce objects such as neurons, roots and vessels
+    with variable thickness to single pixel lines for further analysis.
+
+    See also
+    --------
+    .. [0] https://en.wikipedia.org/wiki/Topological_skeleton
+    """
     from skimage import morphology
     if image.max() == 1:
         return morphology.skeletonize(image)

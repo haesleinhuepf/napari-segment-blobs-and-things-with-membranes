@@ -150,7 +150,7 @@ def threshold_otsu(image:ImageData) -> LabelsData:
 @time_slicer
 def threshold_yen(image : napari.types.ImageData) -> napari.types.LabelsData:
     """
-    Binarize an image according to Yen's method.
+    Binarize an image using Yen's method.
 
     Parameters
     ----------
@@ -171,7 +171,7 @@ def threshold_yen(image : napari.types.ImageData) -> napari.types.LabelsData:
 @time_slicer
 def threshold_isodata(image : napari.types.ImageData) -> napari.types.LabelsData:
     """
-    Binarize an image according to the IsoData / Ridler's method.
+    Binarize an image using the IsoData / Ridler's method.
     The method is similar to ImageJ's "default" threshold.
 
     Parameters
@@ -194,7 +194,7 @@ def threshold_isodata(image : napari.types.ImageData) -> napari.types.LabelsData
 @time_slicer
 def threshold_li(image : napari.types.ImageData) -> napari.types.LabelsData:
     """
-    Binarize an image according to Li's method method.
+    Binarize an image using Li's method method.
 
     Parameters
     ----------
@@ -215,7 +215,7 @@ def threshold_li(image : napari.types.ImageData) -> napari.types.LabelsData:
 @time_slicer
 def threshold_mean(image : napari.types.ImageData) -> napari.types.LabelsData:
     """
-    Binarize an image according to the Mean method.
+    Binarize an image using the Mean method.
 
     Parameters
     ----------
@@ -236,7 +236,7 @@ def threshold_mean(image : napari.types.ImageData) -> napari.types.LabelsData:
 @time_slicer
 def threshold_minimum(image : napari.types.ImageData) -> napari.types.LabelsData:
     """
-    Binarize an image according to the Minimum method.
+    Binarize an image using the Minimum method.
 
     Parameters
     ----------
@@ -257,7 +257,7 @@ def threshold_minimum(image : napari.types.ImageData) -> napari.types.LabelsData
 @time_slicer
 def threshold_triangle(image : napari.types.ImageData) -> napari.types.LabelsData:
     """
-    Binarize an image according to the Triangle method.
+    Binarize an image using the Triangle method.
 
     Parameters
     ----------
@@ -422,8 +422,7 @@ def binary_invert(binary_image:LabelsData) -> LabelsData:
 
 @register_function(menu="Segmentation / labeling > Connected component labeling (scikit-image, nsbatwm)")
 @time_slicer
-def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: bool = False,
-                                 viewer: napari.Viewer = None) -> LabelsData:
+def connected_component_labeling(binary_image: LabelsData, exclude_on_edges: bool = False) -> LabelsData:
     """
     Takes a binary image and produces a label image with all separated objects labeled with
     different integer numbers.
@@ -639,7 +638,7 @@ def divide_images(image1: ImageData, image2: ImageData) -> ImageData:
 @register_function(menu="Image math > Invert image (scikit-image, nsbatwm)")
 @time_slicer
 def invert_image(image: ImageData) -> ImageData:
-    """Invert an image. The excat math behind depends on the image type.
+    """Invert an image. The exact math behind depends on the image type.
 
     See also
     --------

@@ -542,7 +542,7 @@ def gauss_otsu_labeling(image:ImageData, outline_sigma: float = 2) -> LabelsData
     return labels
 
 
-@register_function(menu="Segmentation post-processing > Seeded watershed (scikit-image, nsbatwm)")
+@register_function(menu="Segmentation / labeling > Seeded watershed (scikit-image, nsbatwm)")
 @time_slicer
 def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsData:
     """
@@ -556,6 +556,24 @@ def seeded_watershed(membranes:ImageData, labeled_nuclei:LabelsData) -> LabelsDa
     cells = watershed(
         np.asarray(membranes),
         np.asarray(labeled_nuclei)
+    )
+    return cells
+
+@register_function(menu="Segmentation / labeling > Seeded watershed with mask (scikit-image, nsbatwm)")
+@time_slicer
+def seeded_watershed_with_mask(membranes:ImageData, labeled_nuclei:LabelsData, mask:LabelsData) -> LabelsData:
+    """
+    Takes a image with bright (high intensity) membranes, an image with labeled objects such as nuclei and a mask imge, e.g. a binary image of the entire tissue of interest.
+    The labeled nuclei serve as seeds image for a watershed labeling and the mask for constrainting the flooding.
+
+    See also
+    --------
+    .. [1] https://scikit-image.org/docs/dev/auto_examples/segmentation/plot_watershed.html
+    """
+    cells = watershed(
+        np.asarray(membranes),
+        np.asarray(labeled_nuclei),
+        mask=mask
     )
     return cells
 

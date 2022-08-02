@@ -39,6 +39,13 @@ objects are labeled that are constrained by the membranes.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/seeded_watershed.png)
 
+### Seeded Watershed with mask
+
+If there is additionally a mask image available, one can use the `Seeded Watershed with mask`, to constraint the flooding 
+on a membrane image (1), starting from nuclei (2), limited by a mask image (3) to produce a cell segmentation within the mask (4).
+
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/seeded_watershed_with_mask.png)
+
 ### Seeded Watershed using local minima as starting points
 
 Similar to the Seeded Watershed and Voronoi-Otsu-Labeling explained above, you can use this tool to segment an image

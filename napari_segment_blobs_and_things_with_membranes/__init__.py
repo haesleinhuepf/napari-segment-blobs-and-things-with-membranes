@@ -2,9 +2,11 @@
 __version__ = "0.3.1"
 __common_alias__ = "nsbatwm"
 
-from napari.types import ImageData, LabelsData
+from napari.types import ImageData, LabelsData, PointsData
 
 from napari_plugin_engine import napari_hook_implementation
+
+from typing import Tuple
 
 import numpy as np
 from scipy import ndimage as ndi
@@ -580,7 +582,7 @@ def seeded_watershed_with_mask(membranes:ImageData, labeled_nuclei:LabelsData, m
 
 @register_function(menu="Segmentation / labeling > Seeded watershed using local minima as seeds (nsbatwm)")
 @time_slicer
-def local_minima_seeded_watershed(image:ImageData, spot_sigma: float = 10, outline_sigma: float = 0) -> LabelsData:
+def local_minima_seeded_watershed(image:ImageData, spot_sigma: float = 10, outline_sigma: float = 0) -> Tuple[LabelsData, PointsData]:
     """
     Segment cells in images with fluorescently marked membranes.
 
@@ -597,19 +599,21 @@ def local_minima_seeded_watershed(image:ImageData, spot_sigma: float = 10, outli
 
     spot_blurred = gaussian(image, sigma=spot_sigma)
 
-    spots = label(local_minima(spot_blurred))
+    seeds = local_minima(spot_blurred)
+
+    spots = label(seeds)
 
     if outline_sigma == spot_sigma:
         outline_blurred = spot_blurred
     else:
         outline_blurred = gaussian(image, sigma=outline_sigma)
 
-    return watershed(outline_blurred, spots)
+    return watershed(outline_blurred, spots), seeds
 
 
 @register_function(menu="Segmentation / labeling > Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
 @time_slicer
-def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma: float = 3, outline_sigma: float = 0, minimum_intensity: float = 500) -> LabelsData:
+def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma: float = 3, outline_sigma: float = 0, minimum_intensity: float = 500) -> Tuple[LabelsData,PointsData]:
     """
     Segment cells in images with marked membranes that have a high signal intensity.
 
@@ -619,7 +623,7 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma: float
 
     Afterwards, all objects are removed that have an average intensity below a given minimum_intensity
     """
-    labels = local_minima_seeded_watershed(image, spot_sigma=spot_sigma, outline_sigma=outline_sigma)
+    labels, seeds = local_minima_seeded_watershed(image, spot_sigma=spot_sigma, outline_sigma=outline_sigma)
 
     # measure intensities
     stats = regionprops(labels, image)
@@ -630,7 +634,7 @@ def thresholded_local_minima_seeded_watershed(image:ImageData, spot_sigma: float
     new_label_indices = np.insert(new_label_indices, 0, 0)
     new_labels = np.take(np.asarray(new_label_indices, np.uint32), labels)
 
-    return new_labels
+    return new_labels, seeds
 
 @register_function(menu="Image math > Sum images (numpy, nsbatwm)", factor1={'min': -1000000, 'max': 1000000}, factor2={'min': -1000000, 'max': 1000000})
 @time_slicer

@@ -745,3 +745,30 @@ def Manually_split_labels(labels_layer: "napari.layers.Labels", points_layer: "n
     points_layer.data = []
 
 
+@register_function(menu="Filtering / noise removal > Butterworth (scikit-image, nsbatwm)")
+def butterworth(image: "napari.types.ImageData", cutoff_frequency_ratio: float = 0.005, high_pass: bool = False,
+                order: float = 2) -> "napari.types.ImageData":
+    """Apply a Butterworth filter to enhance high or low frequency features.
+
+    This filter is defined in the Fourier domain.
+
+    Parameters
+    ----------
+    image : (M[, N[, ..., P]][, C]) ndarray
+        Input image.
+    cutoff_frequency_ratio : float, optional
+        Determines the position of the cut-off relative to the shape of the
+        FFT.
+    high_pass : bool, optional
+        Whether to perform a high pass filter. If False, a low pass filter is
+        performed.
+    order : float, optional
+        Order of the filter which affects the slope near the cut-off. Higher
+        order means steeper slope in frequency space.
+
+    See also
+    --------
+    ..[0] https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth
+    """
+    from skimage.filters import butterworth as skimage_butterworth
+    return skimage_butterworth(image, cutoff_frequency_ratio, high_pass, order)

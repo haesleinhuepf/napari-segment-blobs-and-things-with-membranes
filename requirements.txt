@@ -4,8 +4,8 @@
 
 scikit-image
 scipy
-napari-tools-menu
+napari-tools-menu>=0.1.17
 napari-time-slicer
 napari-assistant
-stackview
+stackview>=0.3.1
 -e .

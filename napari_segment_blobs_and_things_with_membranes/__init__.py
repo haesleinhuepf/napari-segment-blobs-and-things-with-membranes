@@ -1,14 +1,10 @@
 
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 __common_alias__ = "nsbatwm"
 
-#from napari.types import ImageData, LabelsData
-
 from napari_plugin_engine import napari_hook_implementation
-
 import numpy as np
 from scipy import ndimage as ndi
-
 from skimage.filters import threshold_otsu as sk_threshold_otsu, gaussian, sobel
 from skimage.segmentation import watershed
 from skimage.feature import peak_local_max
@@ -21,11 +17,11 @@ from skimage.measure import regionprops
 from skimage.segmentation import relabel_sequential
 from skimage.segmentation import clear_border
 from skimage.segmentation import expand_labels as sk_expand_labels
-
 from skimage import filters
 import scipy
 from scipy import ndimage
 from napari_time_slicer import time_slicer
+from stackview import jupyter_displayable_output
 
 @napari_hook_implementation
 def napari_experimental_provide_function():
@@ -89,6 +85,7 @@ def _sobel_3d(image):
 
 
 @register_function(menu="Segmentation post-processing > Split touching objects (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def split_touching_objects(binary:"napari.types.LabelsData", sigma: float = 3.5) -> "napari.types.LabelsData":
     """
@@ -128,6 +125,7 @@ def split_touching_objects(binary:"napari.types.LabelsData", sigma: float = 3.5)
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Otsu et al 1979, scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def threshold_otsu(image:"napari.types.ImageData") -> "napari.types.LabelsData":
     """
@@ -146,6 +144,7 @@ def threshold_otsu(image:"napari.types.ImageData") -> "napari.types.LabelsData":
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Yen et al 1995, scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def threshold_yen(image :"napari.types.ImageData") -> "napari.types.LabelsData":
     """
@@ -167,6 +166,7 @@ def threshold_yen(image :"napari.types.ImageData") -> "napari.types.LabelsData":
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Isodata, Ridler et al 1978, scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def threshold_isodata(image :"napari.types.ImageData") -> "napari.types.LabelsData":
     """
@@ -190,6 +190,7 @@ def threshold_isodata(image :"napari.types.ImageData") -> "napari.types.LabelsDa
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Li et al 1993, scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def threshold_li(image:"napari.types.ImageData") -> "napari.types.LabelsData":
     """
@@ -211,6 +212,7 @@ def threshold_li(image:"napari.types.ImageData") -> "napari.types.LabelsData":
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Ridler et al 1978, scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def threshold_mean(image :"napari.types.ImageData") -> "napari.types.LabelsData":
     """
@@ -232,6 +234,7 @@ def threshold_mean(image :"napari.types.ImageData") -> "napari.types.LabelsData"
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Mean, scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def threshold_minimum(image :"napari.types.ImageData") -> "napari.types.LabelsData":
     """
@@ -253,6 +256,7 @@ def threshold_minimum(image :"napari.types.ImageData") -> "napari.types.LabelsDa
 
 
 @register_function(menu="Segmentation / binarization > Threshold (Triangle method, Zack et al 1977, scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def threshold_triangle(image:"napari.types.ImageData") -> "napari.types.LabelsData":
     """
@@ -274,6 +278,7 @@ def threshold_triangle(image:"napari.types.ImageData") -> "napari.types.LabelsDa
 
 
 @register_function(menu="Filtering / noise removal > Gaussian (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def gaussian_blur(image:"napari.types.ImageData", sigma: float = 1) -> "napari.types.ImageData":
     """
@@ -283,6 +288,7 @@ def gaussian_blur(image:"napari.types.ImageData", sigma: float = 1) -> "napari.t
 
 
 @register_function(menu="Filtering / edge enhancement > Gaussian Laplace (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def gaussian_laplace(image:"napari.types.ImageData", sigma: float = 2)-> "napari.types.ImageData":
     """
@@ -307,6 +313,7 @@ def gaussian_laplace(image:"napari.types.ImageData", sigma: float = 2)-> "napari
 
 
 @register_function(menu="Filtering / noise removal > Median (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def median_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.types.ImageData":
     """
@@ -320,6 +327,7 @@ def median_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.t
 
 
 @register_function(menu="Filtering / noise removal > Percentile (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def percentile_filter(image:"napari.types.ImageData", percentile : float = 50, radius: float = 2)-> "napari.types.ImageData":
     """The percentile filter is similar to the median-filter but it allows specifying the percentile.
@@ -329,6 +337,7 @@ def percentile_filter(image:"napari.types.ImageData", percentile : float = 50, r
 
 
 @register_function(menu="Filtering / background removal > White top-hat (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def white_tophat(image:"napari.types.ImageData", radius: float = 2)-> "napari.types.ImageData":
     """
@@ -340,6 +349,7 @@ def white_tophat(image:"napari.types.ImageData", radius: float = 2)-> "napari.ty
 
 
 @register_function(menu="Filtering / background removal > Black top-hat (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def black_tophat(image:"napari.types.ImageData", radius: float = 2)-> "napari.types.ImageData":
     """
@@ -349,6 +359,7 @@ def black_tophat(image:"napari.types.ImageData", radius: float = 2)-> "napari.ty
 
 
 @register_function(menu="Filtering / background removal > Minimum (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def minimum_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.types.ImageData":
     """
@@ -360,6 +371,7 @@ def minimum_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.
 
 
 @register_function(menu="Filtering / background removal > Maximum (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def maximum_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.types.ImageData":
     """
@@ -372,6 +384,7 @@ def maximum_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.
 
 
 @register_function(menu="Filtering / edge enhancement > Morphological Gradient (scipy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def morphological_gradient(image:"napari.types.ImageData", radius: float = 2)-> "napari.types.ImageData":
     """
@@ -397,6 +410,7 @@ def morphological_gradient(image:"napari.types.ImageData", radius: float = 2)-> 
 
 
 @register_function(menu="Filtering / background removal > Rolling ball (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def subtract_background(image:"napari.types.ImageData", rolling_ball_radius: float = 5) -> "napari.types.ImageData":
     """
@@ -411,6 +425,7 @@ def subtract_background(image:"napari.types.ImageData", rolling_ball_radius: flo
 
 
 @register_function(menu="Segmentation post-processing > Invert binary image (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def binary_invert(binary_image:"napari.types.LabelsData") -> "napari.types.LabelsData":
     """
@@ -420,6 +435,7 @@ def binary_invert(binary_image:"napari.types.LabelsData") -> "napari.types.Label
 
 
 @register_function(menu="Segmentation / labeling > Connected component labeling (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def connected_component_labeling(binary_image: "napari.types.LabelsData", exclude_on_edges: bool = False) -> "napari.types.LabelsData":
     """
@@ -440,6 +456,7 @@ def connected_component_labeling(binary_image: "napari.types.LabelsData", exclud
 
 
 @register_function(menu="Segmentation post-processing > Remove labeled objects at the image border (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def remove_labels_on_edges(label_image: "napari.types.LabelsData") -> "napari.types.LabelsData":
     """
@@ -457,6 +474,7 @@ def remove_labels_on_edges(label_image: "napari.types.LabelsData") -> "napari.ty
 
 
 @register_function(menu="Segmentation post-processing > Expand labels (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def expand_labels(label_image: "napari.types.LabelsData", distance: float = 1) -> "napari.types.LabelsData":
     """
@@ -472,6 +490,7 @@ def expand_labels(label_image: "napari.types.LabelsData", distance: float = 1) -
 
 
 @register_function(menu="Segmentation / labeling > Voronoi-Otsu-labeling (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def voronoi_otsu_labeling(image:"napari.types.ImageData", spot_sigma: float = 2, outline_sigma: float = 2) -> "napari.types.LabelsData":
     """Voronoi-Otsu-Labeling is a segmentation algorithm for blob-like structures such as nuclei and
@@ -514,6 +533,7 @@ def voronoi_otsu_labeling(image:"napari.types.ImageData", spot_sigma: float = 2,
 
 
 @register_function(menu="Segmentation / labeling > Gauss-Otsu-labeling (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def gauss_otsu_labeling(image:"napari.types.ImageData", outline_sigma: float = 2) -> "napari.types.LabelsData":
     """Gauss-Otsu-Labeling can be used to segment objects such as nuclei with bright intensity on
@@ -542,6 +562,7 @@ def gauss_otsu_labeling(image:"napari.types.ImageData", outline_sigma: float = 2
 
 
 @register_function(menu="Segmentation / labeling > Seeded watershed (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def seeded_watershed(membranes:"napari.types.ImageData", labeled_nuclei:"napari.types.LabelsData") -> "napari.types.LabelsData":
     """
@@ -559,6 +580,7 @@ def seeded_watershed(membranes:"napari.types.ImageData", labeled_nuclei:"napari.
     return cells
 
 @register_function(menu="Segmentation / labeling > Seeded watershed with mask (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def seeded_watershed_with_mask(membranes:"napari.types.ImageData", labeled_nuclei:"napari.types.LabelsData", mask:"napari.types.LabelsData") -> "napari.types.LabelsData":
     """
@@ -578,6 +600,7 @@ def seeded_watershed_with_mask(membranes:"napari.types.ImageData", labeled_nucle
 
 
 @register_function(menu="Segmentation / labeling > Seeded watershed using local minima as seeds (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def local_minima_seeded_watershed(image:"napari.types.ImageData", spot_sigma: float = 10, outline_sigma: float = 0) -> "napari.types.LabelsData":
     """
@@ -607,6 +630,7 @@ def local_minima_seeded_watershed(image:"napari.types.ImageData", spot_sigma: fl
 
 
 @register_function(menu="Segmentation / labeling > Seeded watershed using local minima as seeds and an intensity threshold (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def thresholded_local_minima_seeded_watershed(image:"napari.types.ImageData", spot_sigma: float = 3, outline_sigma: float = 0, minimum_intensity: float = 500) -> "napari.types.LabelsData":
     """
@@ -632,6 +656,7 @@ def thresholded_local_minima_seeded_watershed(image:"napari.types.ImageData", sp
     return new_labels
 
 @register_function(menu="Image math > Sum images (numpy, nsbatwm)", factor1={'min': -1000000, 'max': 1000000}, factor2={'min': -1000000, 'max': 1000000})
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def sum_images(image1: "napari.types.ImageData", image2: "napari.types.ImageData", factor1: float = 1, factor2: float = 1) -> "napari.types.ImageData":
     """Add two images"""
@@ -639,6 +664,7 @@ def sum_images(image1: "napari.types.ImageData", image2: "napari.types.ImageData
 
 
 @register_function(menu="Image math > Multiply images (numpy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def multiply_images(image1: "napari.types.ImageData", image2: "napari.types.ImageData") -> "napari.types.ImageData":
     """Multiply two images"""
@@ -646,6 +672,7 @@ def multiply_images(image1: "napari.types.ImageData", image2: "napari.types.Imag
 
 
 @register_function(menu="Image math > Divide images (numpy, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def divide_images(image1: "napari.types.ImageData", image2: "napari.types.ImageData") -> "napari.types.ImageData":
     """Divide one image by another"""
@@ -653,6 +680,7 @@ def divide_images(image1: "napari.types.ImageData", image2: "napari.types.ImageD
 
 
 @register_function(menu="Image math > Invert image (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def invert_image(image: "napari.types.ImageData") -> "napari.types.ImageData":
     """Invert an image. The exact math behind depends on the image type.
@@ -666,6 +694,7 @@ def invert_image(image: "napari.types.ImageData") -> "napari.types.ImageData":
 
 
 @register_function(menu="Segmentation post-processing > Skeletonize (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def skeletonize(image: "napari.types.LabelsData") -> "napari.types.LabelsData":
     """
@@ -745,3 +774,32 @@ def Manually_split_labels(labels_layer: "napari.layers.Labels", points_layer: "n
     points_layer.data = []
 
 
+@register_function(menu="Filtering / noise removal > Butterworth (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
+@time_slicer
+def butterworth(image: "napari.types.ImageData", cutoff_frequency_ratio: float = 0.005, high_pass: bool = False,
+                order: float = 2) -> "napari.types.ImageData":
+    """Apply a Butterworth filter to enhance high or low frequency features.
+
+    This filter is defined in the Fourier domain.
+
+    Parameters
+    ----------
+    image : (M[, N[, ..., P]][, C]) ndarray
+        Input image.
+    cutoff_frequency_ratio : float, optional
+        Determines the position of the cut-off relative to the shape of the
+        FFT.
+    high_pass : bool, optional
+        Whether to perform a high pass filter. If False, a low pass filter is
+        performed.
+    order : float, optional
+        Order of the filter which affects the slope near the cut-off. Higher
+        order means steeper slope in frequency space.
+
+    See also
+    --------
+    ..[0] https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth
+    """
+    from skimage.filters import butterworth as skimage_butterworth
+    return skimage_butterworth(image, cutoff_frequency_ratio, high_pass, order)

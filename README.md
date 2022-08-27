@@ -7,6 +7,7 @@
 [![codecov](https://codecov.io/gh/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/branch/master/graph/badge.svg)](https://codecov.io/gh/haesleinhuepf/napari-segment-blobs-and-things-with-membranes)
 [![Development Status](https://img.shields.io/pypi/status/napari-segment-blobs-and-things-with-membranes.svg)](https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-segment-blobs-and-things-with-membranes)](https://napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7027634.svg)](https://doi.org/10.5281/zenodo.7027634)
 
 This napari-plugin is based on scikit-image and allows segmenting nuclei and cells based on fluorescence microscopy images with high intensity in nuclei and/or membranes.
 

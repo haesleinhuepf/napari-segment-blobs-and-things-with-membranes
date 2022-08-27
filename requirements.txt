@@ -7,4 +7,5 @@ scipy
 napari-tools-menu
 napari-time-slicer
 napari-assistant
+stackview
 -e .

@@ -36,7 +36,8 @@ def test_something():
         divide_images,\
         invert_image, \
         skeletonize, \
-        butterworth
+        butterworth, \
+        extract_slice
 
     import numpy as np
 
@@ -69,7 +70,8 @@ def test_something():
         morphological_gradient,
         local_minima_seeded_watershed,
         invert_image,
-        butterworth]:
+        butterworth,
+        extract_slice]:
 
         print(operation)
 

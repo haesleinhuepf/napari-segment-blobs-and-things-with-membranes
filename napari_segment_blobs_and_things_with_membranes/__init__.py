@@ -1,5 +1,5 @@
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 __common_alias__ = "nsbatwm"
 
 from napari_plugin_engine import napari_hook_implementation
@@ -57,7 +57,8 @@ def napari_experimental_provide_function():
         invert_image,
         skeletonize,
         Manually_merge_labels,
-        Manually_split_labels
+        Manually_split_labels,
+        extract_slice
     ]
 
 
@@ -803,3 +804,17 @@ def butterworth(image: "napari.types.ImageData", cutoff_frequency_ratio: float =
     """
     from skimage.filters import butterworth as skimage_butterworth
     return skimage_butterworth(image, cutoff_frequency_ratio, high_pass, order)
+
+
+@register_function(menu="Utilities > Extract slice (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
+@time_slicer
+def extract_slice(image:"napari.types.ImageData", slice_index:int = 0, axis:int = 0) -> "napari.types.ImageData":
+    """Extract (take) a slice from a stack.
+
+    See also
+    --------
+    ..[0] https://numpy.org/doc/stable/reference/generated/numpy.take.html
+    """
+    return np.take(image, slice_index, axis=axis)
+

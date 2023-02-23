@@ -60,7 +60,8 @@ def napari_experimental_provide_function():
         Manually_split_labels,
         rescale,
         resize,
-        extract_slice
+        extract_slice,
+        gabor
     ]
 
 
@@ -721,10 +722,10 @@ def skeletonize(image: "napari.types.LabelsData") -> "napari.types.LabelsData":
 
 @register_function(menu="Transform / project > Rescale (scikit-image, nsbatwm)")
 @time_slicer
-def rescale(image: ImageData,
+def rescale(image: "napari.types.ImageData",
             scale_x: float = 1.0,
             scale_y: float = 1.0,
-            scale_z: float = 1.0) -> ImageData:
+            scale_z: float = 1.0) -> "napari.types.ImageData":
     """
     Rescale an image by a given set of scale factors.
 
@@ -760,10 +761,10 @@ def rescale(image: ImageData,
 
 @register_function(menu="Transform / project > Resize (scikit-image, nsbatwm)")
 @time_slicer
-def rescale(image: ImageData,
+def resize(image: "napari.types.ImageData",
             new_width: int = 10.0,
             new_height: int = 10.0,
-            new_depth: int = 10.0) -> ImageData:
+            new_depth: int = 10.0) -> "napari.types.ImageData":
     """
     Rescale an image to fit in a given new size.
 
@@ -897,4 +898,3 @@ def extract_slice(image:"napari.types.ImageData", slice_index:int = 0, axis:int 
     ..[0] https://numpy.org/doc/stable/reference/generated/numpy.take.html
     """
     return np.take(image, slice_index, axis=axis)
-

@@ -719,7 +719,7 @@ def skeletonize(image: "napari.types.LabelsData") -> "napari.types.LabelsData":
         return result.astype(int)
 
 
-@register_function(menu="Transform / project > Rescale (scikit-image, nsbatwm)")
+@register_function(menu="Transforms > Rescale (scikit-image, nsbatwm)")
 @time_slicer
 def rescale(image: "napari.types.ImageData",
             scale_x: float = 1.0,
@@ -758,7 +758,7 @@ def rescale(image: "napari.types.ImageData",
     return transform.rescale(image, scale=scale_factors, preserve_range=True)
 
 
-@register_function(menu="Transform / project > Resize (scikit-image, nsbatwm)")
+@register_function(menu="Transforms > Resize (scikit-image, nsbatwm)")
 @time_slicer
 def resize(image: "napari.types.ImageData",
             new_width: int = 10.0,
@@ -887,6 +887,7 @@ def butterworth(image: "napari.types.ImageData", cutoff_frequency_ratio: float =
 
 
 @register_function(menu="Utilities > Extract slice (nsbatwm)")
+@register_function(menu="Transforms > Extract slice (nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def extract_slice(image:"napari.types.ImageData", slice_index:int = 0, axis:int = 0) -> "napari.types.ImageData":

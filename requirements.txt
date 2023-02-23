@@ -2,10 +2,10 @@
 # Requirements of your napari plugin should be listed in setup.cfg
 # See also: https://caremad.io/posts/2013/07/setup-vs-requirement/
 
-napari
 scikit-image
 scipy
-napari-tools-menu
+napari-tools-menu>=0.1.17
 napari-time-slicer
 napari-assistant
+stackview>=0.3.2
 -e .

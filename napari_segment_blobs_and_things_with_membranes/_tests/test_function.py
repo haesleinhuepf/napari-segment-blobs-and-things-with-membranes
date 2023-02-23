@@ -17,7 +17,8 @@ def test_something():
         binary_invert,\
         split_touching_objects,\
         connected_component_labeling,\
-        seeded_watershed,\
+        seeded_watershed, \
+        seeded_watershed_with_mask, \
         voronoi_otsu_labeling, \
         gauss_otsu_labeling,\
         gaussian_laplace,\
@@ -36,7 +37,9 @@ def test_something():
         invert_image, \
         skeletonize, \
         rescale, \
-        resize
+        resize, \
+        butterworth, \
+        extract_slice
 
     import numpy as np
 
@@ -70,7 +73,9 @@ def test_something():
         local_minima_seeded_watershed,
         invert_image,
         rescale,
-        resize]:
+        resize.
+        butterworth,
+        extract_slice]:
 
         print(operation)
 
@@ -87,6 +92,8 @@ def test_something():
         operation(image, image)
 
     skeletonize(image > 0)
+
+    seeded_watershed_with_mask(image, image, image)
 
 def test_remove_labels_on_edges_sequential_labeling():
     image = np.asarray([

@@ -7,6 +7,7 @@
 [![codecov](https://codecov.io/gh/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/branch/master/graph/badge.svg)](https://codecov.io/gh/haesleinhuepf/napari-segment-blobs-and-things-with-membranes)
 [![Development Status](https://img.shields.io/pypi/status/napari-segment-blobs-and-things-with-membranes.svg)](https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-segment-blobs-and-things-with-membranes)](https://napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7027634.svg)](https://doi.org/10.5281/zenodo.7027634)
 
 This napari-plugin is based on scikit-image and allows segmenting nuclei and cells based on fluorescence microscopy images with high intensity in nuclei and/or membranes.
 
@@ -38,6 +39,13 @@ Starting from an image showing high-intensity membranes and a seed-image where o
 objects are labeled that are constrained by the membranes.
 
 ![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/seeded_watershed.png)
+
+### Seeded Watershed with mask
+
+If there is additionally a mask image available, one can use the `Seeded Watershed with mask`, to constraint the flooding 
+on a membrane image (1), starting from nuclei (2), limited by a mask image (3) to produce a cell segmentation within the mask (4).
+
+![img.png](https://github.com/haesleinhuepf/napari-segment-blobs-and-things-with-membranes/raw/main/docs/seeded_watershed_with_mask.png)
 
 ### Seeded Watershed using local minima as starting points
 

@@ -60,8 +60,7 @@ def napari_experimental_provide_function():
         Manually_split_labels,
         rescale,
         resize,
-        extract_slice,
-        gabor
+        extract_slice
     ]
 
 

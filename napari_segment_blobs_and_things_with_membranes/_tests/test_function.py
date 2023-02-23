@@ -36,6 +36,8 @@ def test_something():
         divide_images,\
         invert_image, \
         skeletonize, \
+        rescale, \
+        resize, \
         butterworth, \
         extract_slice
 
@@ -70,6 +72,8 @@ def test_something():
         morphological_gradient,
         local_minima_seeded_watershed,
         invert_image,
+        rescale,
+        resize.
         butterworth,
         extract_slice]:
 

@@ -58,6 +58,8 @@ def napari_experimental_provide_function():
         skeletonize,
         Manually_merge_labels,
         Manually_split_labels,
+        rescale,
+        resize,
         extract_slice
     ]
 
@@ -715,6 +717,84 @@ def skeletonize(image: "napari.types.LabelsData") -> "napari.types.LabelsData":
             skeleton = morphology.skeletonize(image == i)
             result = skeleton * i + result
         return result.astype(int)
+
+
+@register_function(menu="Transform / project > Rescale (scikit-image, nsbatwm)")
+@time_slicer
+def rescale(image: ImageData,
+            scale_x: float = 1.0,
+            scale_y: float = 1.0,
+            scale_z: float = 1.0) -> ImageData:
+    """
+    Rescale an image by a given set of scale factors.
+
+    Parameters
+    ----------
+    image : ImageData
+    scale_x : float, optional
+        factor by which to scale the image along the x axis. The default is 1.0.
+    scale_y : float, optional
+        factor by which to scale the image along the y dimension. The default is 1.0.
+    scale_z : float, optional
+        factor by which to scale the image along the z dimension. The default is 1.0.
+
+    Returns
+    -------
+    ImageData
+
+    See Also
+    --------
+    https://scikit-image.org/docs/stable/api/skimage.transform.html#rescale
+    """
+    from skimage import transform
+
+    if len(image.shape) == 3:
+        scale_factors = np.asarray([scale_z, scale_y, scale_x])
+    elif len(image.shape) == 2:
+        scale_factors = np.asarray([scale_y, scale_x])
+    else:
+        raise ValueError("Rescaling only supported for 2D and 3D images")
+
+    return transform.rescale(image, scale=scale_factors, preserve_range=True)
+
+
+@register_function(menu="Transform / project > Resize (scikit-image, nsbatwm)")
+@time_slicer
+def rescale(image: ImageData,
+            new_width: int = 10.0,
+            new_height: int = 10.0,
+            new_depth: int = 10.0) -> ImageData:
+    """
+    Rescale an image to fit in a given new size.
+
+    Parameters
+    ----------
+    image : ImageData
+    new_width : int, optional
+        factor by which to scale the image along the x axis. The default is 1.0.
+    new_height : int, optional
+        factor by which to scale the image along the y dimension. The default is 1.0.
+    new_depth : int, optional
+        factor by which to scale the image along the z dimension. The default is 1.0.
+
+    Returns
+    -------
+    ImageData
+
+    See Also
+    --------
+    https://scikit-image.org/docs/stable/api/skimage.transform.html#resize
+    """
+    from skimage import transform
+
+    if len(image.shape) == 3:
+        output_shape = np.asarray([new_depth, new_height, new_width])
+    elif len(image.shape) == 2:
+        output_shape = np.asarray([new_height, new_width])
+    else:
+        raise ValueError("Resizing only supported for 2D and 3D images")
+
+    return transform.resize(image, output_shape, preserve_range=True)
 
 
 @register_function(menu="Utilities > Manually merge labels (nsbatwm)")

@@ -913,11 +913,14 @@ def gabor(image: "napari.types.ImageData", frequency: float = 10, theta: float =
     """
     from skimage.filters import gabor as \
         sk_gabor
-
-    return sk_gabor(image,
+    if len(image.shape) > 2:
+        raise ValueError("Gabor is only supported for 2D images")
+    gabor_real, gabor_imag = sk_gabor(image,
              frequency=frequency,
              theta=theta,
              bandwidth=bandwidth,
              offset=offset,
              mode='reflect',
              cval=0)
+    # Returns magnitude
+    return np.sqrt(gabor_real**2 + gabor_imag**2)

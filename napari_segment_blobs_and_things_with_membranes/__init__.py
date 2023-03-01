@@ -22,6 +22,7 @@ import scipy
 from scipy import ndimage
 from napari_time_slicer import time_slicer
 from stackview import jupyter_displayable_output
+from napari.utils import notifications
 
 @napari_hook_implementation
 def napari_experimental_provide_function():
@@ -914,7 +915,8 @@ def gabor(image: "napari.types.ImageData", frequency: float = 10, theta: float =
     from skimage.filters import gabor as \
         sk_gabor
     if len(image.shape) > 2:
-        raise ValueError("Gabor is only supported for 2D images")
+        notifications.show_warning("Gabor is only supported for 2D images")
+        return
     gabor_real, gabor_imag = sk_gabor(image,
              frequency=frequency,
              theta=theta,

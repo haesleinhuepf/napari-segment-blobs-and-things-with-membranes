@@ -22,6 +22,7 @@ import scipy
 from scipy import ndimage
 from napari_time_slicer import time_slicer
 from stackview import jupyter_displayable_output
+from napari.utils import notifications
 
 @napari_hook_implementation
 def napari_experimental_provide_function():
@@ -60,7 +61,8 @@ def napari_experimental_provide_function():
         Manually_split_labels,
         rescale,
         resize,
-        extract_slice
+        extract_slice,
+        gabor
     ]
 
 
@@ -898,3 +900,30 @@ def extract_slice(image:"napari.types.ImageData", slice_index:int = 0, axis:int 
     ..[0] https://numpy.org/doc/stable/reference/generated/numpy.take.html
     """
     return np.take(image, slice_index, axis=axis)
+
+
+@register_function(menu="Filtering > Gabor (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
+@time_slicer
+def gabor(image: "napari.types.ImageData", frequency: float = 10, theta: float = 0, bandwidth: float = 1, offset: float = 0) -> "napari.types.ImageData":
+    """
+    The Gabor filter is useful for enhancing spatially oriented patterns and textures.
+
+    See also
+    --------
+    https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.gabor
+    """
+    from skimage.filters import gabor as \
+        sk_gabor
+    if len(image.shape) > 2:
+        notifications.show_warning("Gabor is only supported for 2D images")
+        return
+    gabor_real, gabor_imag = sk_gabor(image,
+             frequency=frequency,
+             theta=theta,
+             bandwidth=bandwidth,
+             offset=offset,
+             mode='reflect',
+             cval=0)
+    # Returns magnitude
+    return np.sqrt(gabor_real**2 + gabor_imag**2)

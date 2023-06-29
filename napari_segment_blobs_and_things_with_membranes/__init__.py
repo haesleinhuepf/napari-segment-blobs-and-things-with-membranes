@@ -905,3 +905,17 @@ def extract_slice(image:"napari.types.ImageData", slice_index:int = 0, axis:int 
     ..[0] https://numpy.org/doc/stable/reference/generated/numpy.take.html
     """
     return np.take(image, slice_index, axis=axis)
+
+
+@register_function(menu="Transforms > Sub-sample (nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
+@time_slicer
+def sub_sample(image:"napari.types.ImageData", sample_x: int = 1, sample_y: int = 1, sample_z: int = 1) -> "napari.types.ImageData":
+    """Sample every nth pixel in x, y and z."""
+    if len(image.shape) == 2:
+        return image[::sample_y, ::sample_x]
+    elif len(image.shape) == 3:
+        return image[::sample_z, ::sample_y, ::sample_x]
+    else:
+        raise ValueError("Sub-sampling only supported for 2D and 3D images")
+

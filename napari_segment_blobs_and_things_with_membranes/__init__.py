@@ -14,7 +14,7 @@ from skimage.morphology import local_maxima, local_minima
 from skimage.restoration import rolling_ball
 from napari_tools_menu import register_function
 from skimage.measure import regionprops
-from skimage.segmentation import relabel_sequential
+from skimage.segmentation import relabel_sequential as sk_relabel_sequential
 from skimage.segmentation import clear_border
 from skimage.segmentation import expand_labels as sk_expand_labels
 from skimage import filters
@@ -472,7 +472,7 @@ def remove_labels_on_edges(label_image: "napari.types.LabelsData") -> "napari.ty
     """
 
     result = clear_border(np.asarray(label_image))
-    relabeled_result, _, _ = relabel_sequential(result)
+    relabeled_result, _, _ = sk_relabel_sequential(result)
     return relabeled_result
 
 
@@ -652,7 +652,7 @@ def thresholded_local_minima_seeded_watershed(image:"napari.types.ImageData", sp
     intensities = [r.mean_intensity for r in stats]
 
     # filter labels with low intensity
-    new_label_indices, _, _ = relabel_sequential((np.asarray(intensities) > minimum_intensity) * np.arange(labels.max()))
+    new_label_indices, _, _ = sk_relabel_sequential((np.asarray(intensities) > minimum_intensity) * np.arange(labels.max()))
     new_label_indices = np.insert(new_label_indices, 0, 0)
     new_labels = np.take(np.asarray(new_label_indices, np.uint32), labels)
 
@@ -890,8 +890,6 @@ def butterworth(image: "napari.types.ImageData", cutoff_frequency_ratio: float =
 @time_slicer
 def relabel_sequential(label_image:"napari.types.LabelsData") -> "napari.types.LabelsData":
     """Relabel a label image sequentially"""
-    from skimage.segmentation import relabel_sequential as sk_relabel_sequential
-
     return sk_relabel_sequential(label_image)[0]
 
 

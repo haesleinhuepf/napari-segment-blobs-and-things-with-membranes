@@ -885,6 +885,15 @@ def butterworth(image: "napari.types.ImageData", cutoff_frequency_ratio: float =
     from skimage.filters import butterworth as skimage_butterworth
     return skimage_butterworth(image, cutoff_frequency_ratio, high_pass, order)
 
+@register_function(menu="Segmentation post-processing > Relabel sequential (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
+@time_slicer
+def relabel_sequential(label_image:"napari.types.LabelsData") -> "napari.types.LabelsData":
+    """Relabel a label image sequentially"""
+    from skimage.segmentation import relabel_sequential as sk_relabel_sequential
+
+    return sk_relabel_sequential(label_image)[0]
+
 
 @register_function(menu="Utilities > Extract slice (nsbatwm)")
 @register_function(menu="Transforms > Extract slice (nsbatwm)")

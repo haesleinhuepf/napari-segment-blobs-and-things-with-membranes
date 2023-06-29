@@ -143,3 +143,16 @@ def test_connected_component_labeling_sequential_labeling():
 
     assert np.array_equal(result, reference)
 
+
+def test_relabel_sequential():
+    image = np.asarray([[0, 0, 0, 1, 3, 4]])
+    reference = np.asarray([[0, 0, 0, 1, 2, 3]])
+
+    from napari_segment_blobs_and_things_with_membranes import relabel_sequential
+    result = relabel_sequential(image)
+
+    print(result)
+    print(reference)
+
+    assert np.array_equal(result, reference)
+

@@ -73,7 +73,7 @@ def test_something():
         local_minima_seeded_watershed,
         invert_image,
         rescale,
-        resize.
+        resize,
         butterworth,
         extract_slice]:
 

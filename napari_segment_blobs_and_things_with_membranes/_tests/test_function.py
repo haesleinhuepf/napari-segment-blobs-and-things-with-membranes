@@ -40,7 +40,8 @@ def test_something():
         resize, \
         butterworth, \
         extract_slice, \
-        sub_sample
+        sub_sample, \
+        squeeze
 
     import numpy as np
 
@@ -77,7 +78,8 @@ def test_something():
         resize,
         butterworth,
         extract_slice,
-        sub_sample]:
+        sub_sample,
+        squeeze]:
 
         print(operation)
 

@@ -919,3 +919,9 @@ def sub_sample(image:"napari.types.ImageData", sample_x: int = 1, sample_y: int 
     else:
         raise ValueError("Sub-sampling only supported for 2D and 3D images")
 
+
+@register_function(menu="Transforms > Remove axes of length 1 (numpy.squeeze, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
+@time_slicer
+def squeeze(image:"napari.types.ImageData") -> "napari.types.ImageData":
+    return np.squeeze(image)

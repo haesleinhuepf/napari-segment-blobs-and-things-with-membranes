@@ -22,7 +22,8 @@ def test_something():
         voronoi_otsu_labeling, \
         gauss_otsu_labeling,\
         gaussian_laplace,\
-        median_filter,\
+        median_filter, \
+        mode_filter, \
         maximum_filter,\
         minimum_filter,\
         percentile_filter,\
@@ -66,6 +67,7 @@ def test_something():
         gauss_otsu_labeling,
         gaussian_laplace,
         median_filter,
+        mode_filter,
         maximum_filter,
         minimum_filter,
         percentile_filter,

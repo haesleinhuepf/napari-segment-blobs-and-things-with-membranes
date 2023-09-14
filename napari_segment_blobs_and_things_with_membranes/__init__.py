@@ -330,7 +330,7 @@ def median_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.t
     return scipy.ndimage.median_filter(image.astype(float), size=int(radius * 2 + 1))
 
 
-@register_function(menu="Segmentation post-processing > Invert binary image (nsbatwm)")
+@register_function(menu="Segmentation post-processing > Mode filter (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def mode_filter(labels: "napari.types.LabelsData", radius: int = 2)-> "napari.types.LabelsData":

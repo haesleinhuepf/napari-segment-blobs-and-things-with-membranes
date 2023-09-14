@@ -67,7 +67,6 @@ def test_something():
         gauss_otsu_labeling,
         gaussian_laplace,
         median_filter,
-        mode_filter,
         maximum_filter,
         minimum_filter,
         percentile_filter,
@@ -100,6 +99,8 @@ def test_something():
     skeletonize(image > 0)
 
     seeded_watershed_with_mask(image, image, image)
+
+    mode_filter(image.astype(int))
 
 def test_remove_labels_on_edges_sequential_labeling():
     image = np.asarray([

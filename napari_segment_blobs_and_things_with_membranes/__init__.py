@@ -43,6 +43,7 @@ def napari_experimental_provide_function():
         gauss_otsu_labeling,
         gaussian_laplace,
         median_filter,
+        mode_filter,
         maximum_filter,
         minimum_filter,
         percentile_filter,

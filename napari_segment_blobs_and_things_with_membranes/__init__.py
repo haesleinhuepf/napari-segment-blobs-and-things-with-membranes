@@ -344,7 +344,7 @@ def mode_filter(labels: "napari.types.LabelsData", radius: int = 2)-> "napari.ty
         raise ValueError("The mode filter only works on label images with less than 256 labels.")
 
     from skimage.filters.rank import majority
-    footprint = np.ones((radius,) * labels.ndim)
+    footprint = np.ones((int(radius * 2 + 1),) * labels.ndim)
     return majority(labels.astype(np.uint8), footprint=footprint).astype(labels.dtype)
 
 @register_function(menu="Filtering / noise removal > Percentile (scipy, nsbatwm)")

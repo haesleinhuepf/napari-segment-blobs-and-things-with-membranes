@@ -333,14 +333,19 @@ def median_filter(image:"napari.types.ImageData", radius: float = 2)-> "napari.t
 @register_function(menu="Segmentation post-processing > Invert binary image (nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def mode_filter(image:"napari.types.LabelsData", radius: int = 2)-> "napari.types.LabelsData":
+def mode_filter(labels: "napari.types.LabelsData", radius: int = 2)-> "napari.types.LabelsData":
     """
     The mode-filter allows correcting label images in a way that every pixel receives the most popular pixel value
     in its neighborhood.
-    """
-    from scipy import ndimage
-    return ndimage.generic_filter(image, lambda x: np.bincount(x).argmax(), size=radius)
 
+    Note: This operation is limited to images with less than 256 labels.
+    """
+    if labels.max() > 255:
+        raise ValueError("The mode filter only works on label images with less than 256 labels.")
+
+    from skimage.filters.rank import majority
+    footprint = np.ones((radius,) * labels.ndim)
+    return majority(labels.astype(np.uint8), footprint=footprint).astype(labels.dtype)
 
 @register_function(menu="Filtering / noise removal > Percentile (scipy, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')

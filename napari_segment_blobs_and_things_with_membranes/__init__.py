@@ -738,6 +738,7 @@ def skeletonize(image: "napari.types.LabelsData") -> "napari.types.LabelsData":
 
 
 @register_function(menu="Transforms > Rescale (scikit-image, nsbatwm)")
+@jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def rescale(image: "napari.types.ImageData",
             scale_x: float = 1.0,

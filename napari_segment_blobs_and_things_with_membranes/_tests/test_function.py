@@ -42,7 +42,15 @@ def test_something():
         butterworth, \
         extract_slice, \
         sub_sample, \
-        squeeze
+        squeeze, \
+        grayscale_erosion, \
+        binary_erosion, \
+        grayscale_dilation, \
+        binary_dilation, \
+        grayscale_opening, \
+        binary_opening, \
+        grayscale_closing, \
+        binary_closing
 
     import numpy as np
 
@@ -80,7 +88,15 @@ def test_something():
         butterworth,
         extract_slice,
         sub_sample,
-        squeeze]:
+        squeeze,
+        grayscale_erosion,
+        binary_erosion,
+        grayscale_dilation,
+        binary_dilation,
+        grayscale_opening,
+        binary_opening,
+        grayscale_closing,
+        binary_closing]:
 
         print(operation)
 

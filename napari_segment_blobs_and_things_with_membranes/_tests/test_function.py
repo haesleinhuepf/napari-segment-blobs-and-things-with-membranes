@@ -50,7 +50,8 @@ def test_something():
         grayscale_opening, \
         binary_opening, \
         grayscale_closing, \
-        binary_closing
+        binary_closing, \
+        FootprintShape
 
     import numpy as np
 
@@ -88,15 +89,7 @@ def test_something():
         butterworth,
         extract_slice,
         sub_sample,
-        squeeze,
-        grayscale_erosion,
-        binary_erosion,
-        grayscale_dilation,
-        binary_dilation,
-        grayscale_opening,
-        binary_opening,
-        grayscale_closing,
-        binary_closing]:
+        squeeze]:
 
         print(operation)
 
@@ -111,6 +104,21 @@ def test_something():
         print(operation)
 
         operation(image, image)
+
+    for operation in [
+        grayscale_erosion,
+        binary_erosion,
+        grayscale_dilation,
+        binary_dilation,
+        grayscale_opening,
+        binary_opening,
+        grayscale_closing,
+        binary_closing
+    ]:
+        labels = image > 0
+        for footprint_shape in FootprintShape:
+            print(f"{operation} with {footprint_shape}")
+            operation(labels, footprint_shape=footprint_shape)
 
     skeletonize(image > 0)
 

@@ -2,6 +2,7 @@
 __version__ = "0.3.7"
 __common_alias__ = "nsbatwm"
 
+import skimage.morphology
 from napari_plugin_engine import napari_hook_implementation
 import numpy as np
 from scipy import ndimage as ndi
@@ -25,6 +26,7 @@ import scipy
 from scipy import ndimage
 from napari_time_slicer import time_slicer
 from stackview import jupyter_displayable_output
+from enum import Enum
 
 @napari_hook_implementation
 def napari_experimental_provide_function():
@@ -99,8 +101,35 @@ def _sobel_3d(image):
     return ndi.convolve(image, kernel)
 
 
-def _generate_footprint(radius, ndim):
+class FootprintShape(Enum):
+    square = 'square'
+    disk = 'disk'
+
+
+def _generate_square_footprint(radius, ndim):
+    """Generate a square footprint (for any number of dimensions - ndim) with the
+    given radius"""
     return np.ones((int(radius * 2 + 1),) * ndim)
+
+
+def _generate_disk_footprint(radius, ndim):
+    """Generate a disk footprint (for 2D or 3D) with the given radius."""
+    if ndim == 2:
+        return skimage.morphology.disk(radius)
+    elif ndim == 3:
+        return skimage.morphology.ball(radius)
+    else:
+        raise ValueError("Disk footprints are only implemented for 2D or 3D images - "
+                         "please switch to a square footprint")
+
+
+def _generate_footprint(footprint_shape, radius, ndim):
+    """Generate a footprint with given shape, radius and number of dimensions (ndim)"""
+    if footprint_shape == FootprintShape.square:
+        return _generate_square_footprint(radius, ndim)
+
+    elif footprint_shape == FootprintShape.disk:
+        return _generate_disk_footprint(radius, ndim)
 
 
 @register_function(menu="Segmentation post-processing > Split touching objects (nsbatwm)")
@@ -359,7 +388,7 @@ def mode_filter(labels: "napari.types.LabelsData", radius: int = 2)-> "napari.ty
         raise ValueError("The mode filter only works on label images with less than 256 labels.")
 
     from skimage.filters.rank import majority
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_square_footprint(radius, labels.ndim)
     return majority(labels.astype(np.uint8), footprint=footprint).astype(labels.dtype)
 
 @register_function(menu="Filtering / noise removal > Percentile (scipy, nsbatwm)")
@@ -964,126 +993,134 @@ def squeeze(image:"napari.types.ImageData") -> "napari.types.ImageData":
 @register_function(menu="Segmentation post-processing > Grayscale erosion (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_erosion(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_erosion(labels: "napari.types.LabelsData", radius: int = 1,
+                      footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies grayscale erosion to an image, using a footprint with the given radius.
+    Applies grayscale erosion to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return erosion(labels, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary erosion (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def binary_erosion(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def binary_erosion(labels: "napari.types.LabelsData", radius: int = 1,
+                   footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies binary erosion to an image, using a footprint with the given radius.
+    Applies binary erosion to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.binary_erosion
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return sk_binary_erosion(labels, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Grayscale dilation (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_dilation(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_dilation(labels: "napari.types.LabelsData", radius: int = 1,
+                       footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies grayscale dilation to an image, using a footprint with the given radius.
+    Applies grayscale dilation to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return dilation(labels, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary dilation (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def binary_dilation(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def binary_dilation(labels: "napari.types.LabelsData", radius: int = 1,
+                    footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies binary dilation to an image, using a footprint with the given radius.
+    Applies binary dilation to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.binary_dilation
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return sk_binary_dilation(labels, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Grayscale opening (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_opening(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_opening(labels: "napari.types.LabelsData", radius: int = 1,
+                      footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies grayscale opening to an image, using a footprint with the given radius.
+    Applies grayscale opening to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return opening(labels, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary opening (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def binary_opening(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def binary_opening(labels: "napari.types.LabelsData", radius: int = 1,
+                   footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies binary opening to an image, using a footprint with the given radius.
+    Applies binary opening to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.binary_opening
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return sk_binary_opening(labels, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Grayscale closing (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_closing(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_closing(labels: "napari.types.LabelsData", radius: int = 1,
+                      footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies grayscale closing to an image, using a footprint with the given radius.
+    Applies grayscale closing to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return closing(labels, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary closing (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def binary_closing(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def binary_closing(labels: "napari.types.LabelsData", radius: int = 1,
+                   footprint_shape: FootprintShape = FootprintShape.square) -> "napari.types.LabelsData":
     """
-    Applies binary opening to an image, using a footprint with the given radius.
+    Applies binary opening to an image, using a footprint with the given radius and shape.
 
     See also
     --------
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.binary_closing
     """
 
-    footprint = _generate_footprint(radius, labels.ndim)
+    footprint = _generate_footprint(footprint_shape, radius, labels.ndim)
     return sk_binary_closing(labels, footprint=footprint)

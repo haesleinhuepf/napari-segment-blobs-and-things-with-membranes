@@ -2,7 +2,6 @@
 __version__ = "0.3.7"
 __common_alias__ = "nsbatwm"
 
-import skimage.morphology
 from napari_plugin_engine import napari_hook_implementation
 import numpy as np
 from scipy import ndimage as ndi
@@ -10,7 +9,7 @@ from skimage.filters import threshold_otsu as sk_threshold_otsu, gaussian, sobel
 from skimage.segmentation import watershed
 from skimage.feature import peak_local_max
 from skimage.measure import label
-from skimage.morphology import local_maxima, local_minima, opening, closing, erosion, dilation
+from skimage.morphology import local_maxima, local_minima, opening, closing, erosion, dilation, disk, ball
 from skimage.morphology import binary_opening as sk_binary_opening
 from skimage.morphology import binary_closing as sk_binary_closing
 from skimage.morphology import binary_erosion as sk_binary_erosion
@@ -115,9 +114,9 @@ def _generate_square_footprint(radius, ndim):
 def _generate_disk_footprint(radius, ndim):
     """Generate a disk footprint (for 2D or 3D) with the given radius."""
     if ndim == 2:
-        return skimage.morphology.disk(radius)
+        return disk(radius)
     elif ndim == 3:
-        return skimage.morphology.ball(radius)
+        return ball(radius)
     else:
         raise ValueError("Disk footprints are only implemented for 2D or 3D images - "
                          "please switch to a square footprint")

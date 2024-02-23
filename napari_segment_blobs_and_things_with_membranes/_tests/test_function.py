@@ -50,15 +50,16 @@ def test_something():
         grayscale_opening, \
         binary_opening, \
         grayscale_closing, \
-        binary_closing, \
-        FootprintShape
+        binary_closing
 
     import numpy as np
 
-    image = np.asarray([[0, 1, 2, 3],
-                        [2, 0, 1, 3],
-                        [2, 253, 1, 3],
-                        [255, 253, 1, 3]])
+    image_2d = np.asarray([[0, 1, 2, 3],
+                           [2, 0, 1, 3],
+                           [2, 253, 1, 3],
+                           [255, 253, 1, 3]])
+
+    image_3d = np.ones((4, 4, 4))
 
     for operation in [gaussian_blur,
         subtract_background,
@@ -93,7 +94,7 @@ def test_something():
 
         print(operation)
 
-        operation(image)
+        operation(image_2d)
 
     for operation in [
         seeded_watershed,
@@ -103,7 +104,7 @@ def test_something():
 
         print(operation)
 
-        operation(image, image)
+        operation(image_2d, image_2d)
 
     for operation in [
         grayscale_erosion,
@@ -115,16 +116,16 @@ def test_something():
         grayscale_closing,
         binary_closing
     ]:
-        labels = image > 0
-        for footprint_shape in FootprintShape:
-            print(f"{operation} with {footprint_shape}")
-            operation(labels, footprint_shape=footprint_shape)
+        for image in (image_2d, image_3d):
+            labels = image > 0
+            print(f"{operation} with {labels.ndim}d image")
+            operation(labels)
 
-    skeletonize(image > 0)
+    skeletonize(image_2d > 0)
 
-    seeded_watershed_with_mask(image, image, image)
+    seeded_watershed_with_mask(image_2d, image_2d, image_2d)
 
-    mode_filter(image.astype(int))
+    mode_filter(image_2d.astype(int))
 
 def test_remove_labels_on_edges_sequential_labeling():
     image = np.asarray([

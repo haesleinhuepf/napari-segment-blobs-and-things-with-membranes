@@ -25,7 +25,6 @@ import scipy
 from scipy import ndimage
 from napari_time_slicer import time_slicer
 from stackview import jupyter_displayable_output
-from enum import Enum
 
 @napari_hook_implementation
 def napari_experimental_provide_function():

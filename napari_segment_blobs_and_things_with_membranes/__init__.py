@@ -970,7 +970,7 @@ def squeeze(image:"napari.types.ImageData") -> "napari.types.ImageData":
 @register_function(menu="Filtering / background removal > Grayscale erosion (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_erosion(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_erosion(image: "napari.types.ImageData", radius: int = 1) -> "napari.types.ImageData":
     """
     Applies grayscale erosion to an image, using a disk/sphere footprint with the given radius.
 
@@ -979,8 +979,8 @@ def grayscale_erosion(labels: "napari.types.LabelsData", radius: int = 1) -> "na
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion
     """
 
-    footprint = _generate_disk_footprint(radius, labels.ndim)
-    return erosion(labels, footprint=footprint)
+    footprint = _generate_disk_footprint(radius, image.ndim)
+    return erosion(image, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary erosion (scikit-image, nsbatwm)")
@@ -1002,7 +1002,7 @@ def binary_erosion(binary_image: "napari.types.LabelsData", radius: int = 1) -> 
 @register_function(menu="Filtering / background removal > Grayscale dilation (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_dilation(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_dilation(image: "napari.types.ImageData", radius: int = 1) -> "napari.types.ImageData":
     """
     Applies grayscale dilation to an image, using a disk/sphere footprint with the given radius.
 
@@ -1011,8 +1011,8 @@ def grayscale_dilation(labels: "napari.types.LabelsData", radius: int = 1) -> "n
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation
     """
 
-    footprint = _generate_disk_footprint(radius, labels.ndim)
-    return dilation(labels, footprint=footprint)
+    footprint = _generate_disk_footprint(radius, image.ndim)
+    return dilation(image, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary dilation (scikit-image, nsbatwm)")
@@ -1034,7 +1034,7 @@ def binary_dilation(binary_image: "napari.types.LabelsData", radius: int = 1) ->
 @register_function(menu="Filtering / background removal > Grayscale opening (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_opening(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_opening(image: "napari.types.ImageData", radius: int = 1) -> "napari.types.ImageData":
     """
     Applies grayscale opening to an image, using a disk/sphere footprint with the given radius.
 
@@ -1043,8 +1043,8 @@ def grayscale_opening(labels: "napari.types.LabelsData", radius: int = 1) -> "na
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening
     """
 
-    footprint = _generate_disk_footprint(radius, labels.ndim)
-    return opening(labels, footprint=footprint)
+    footprint = _generate_disk_footprint(radius, image.ndim)
+    return opening(image, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary opening (scikit-image, nsbatwm)")
@@ -1066,7 +1066,7 @@ def binary_opening(binary_image: "napari.types.LabelsData", radius: int = 1) -> 
 @register_function(menu="Filtering / background removal > Grayscale closing (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
-def grayscale_closing(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
+def grayscale_closing(image: "napari.types.ImageData", radius: int = 1) -> "napari.types.ImageData":
     """
     Applies grayscale closing to an image, using a disk/sphere footprint with the given radius.
 
@@ -1075,8 +1075,8 @@ def grayscale_closing(labels: "napari.types.LabelsData", radius: int = 1) -> "na
     ..[0] https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing
     """
 
-    footprint = _generate_disk_footprint(radius, labels.ndim)
-    return closing(labels, footprint=footprint)
+    footprint = _generate_disk_footprint(radius, image.ndim)
+    return closing(image, footprint=footprint)
 
 
 @register_function(menu="Segmentation post-processing > Binary closing (scikit-image, nsbatwm)")

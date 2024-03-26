@@ -80,3 +80,5 @@ target/
 
 .idea/*
 venv/*
+
+deploy.bat

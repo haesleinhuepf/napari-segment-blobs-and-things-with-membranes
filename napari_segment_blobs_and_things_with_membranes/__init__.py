@@ -968,7 +968,7 @@ def squeeze(image:"napari.types.ImageData") -> "napari.types.ImageData":
     return np.squeeze(image)
 
 
-@register_function(menu="Segmentation post-processing > Grayscale erosion (scikit-image, nsbatwm)")
+@register_function(menu="Filtering / background removal > Grayscale erosion (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def grayscale_erosion(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
@@ -1000,7 +1000,7 @@ def binary_erosion(labels: "napari.types.LabelsData", radius: int = 1) -> "napar
     return sk_binary_erosion(labels, footprint=footprint)
 
 
-@register_function(menu="Segmentation post-processing > Grayscale dilation (scikit-image, nsbatwm)")
+@register_function(menu="Filtering / background removal > Grayscale dilation (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def grayscale_dilation(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
@@ -1032,7 +1032,7 @@ def binary_dilation(labels: "napari.types.LabelsData", radius: int = 1) -> "napa
     return sk_binary_dilation(labels, footprint=footprint)
 
 
-@register_function(menu="Segmentation post-processing > Grayscale opening (scikit-image, nsbatwm)")
+@register_function(menu="Filtering / background removal > Grayscale opening (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def grayscale_opening(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":
@@ -1064,7 +1064,7 @@ def binary_opening(labels: "napari.types.LabelsData", radius: int = 1) -> "napar
     return sk_binary_opening(labels, footprint=footprint)
 
 
-@register_function(menu="Segmentation post-processing > Grayscale closing (scikit-image, nsbatwm)")
+@register_function(menu="Filtering / background removal > Grayscale closing (scikit-image, nsbatwm)")
 @jupyter_displayable_output(library_name='nsbatwm', help_url='https://www.napari-hub.org/plugins/napari-segment-blobs-and-things-with-membranes')
 @time_slicer
 def grayscale_closing(labels: "napari.types.LabelsData", radius: int = 1) -> "napari.types.LabelsData":

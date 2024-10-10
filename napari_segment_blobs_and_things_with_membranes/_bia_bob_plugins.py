@@ -11,6 +11,7 @@ def list_bia_bob_plugins():
     except:
         pass
 
+    basic_hints = ""
     if not good_alternative_installed:
         basic_hints = """
     

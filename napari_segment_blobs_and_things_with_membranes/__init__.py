@@ -1,5 +1,5 @@
 
-__version__ = "0.3.9"
+__version__ = "0.3.10"
 __common_alias__ = "nsbatwm"
 
 from napari_plugin_engine import napari_hook_implementation

@@ -1,5 +1,7 @@
 def list_bia_bob_plugins():
     """List of function hints for bia_bob"""
+    good_alternative_installed = False
+
     try:
         import pyclesperanto
         good_alternative_installed = True

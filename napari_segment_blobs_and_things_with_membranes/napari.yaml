@@ -1,0 +1,90 @@
+contributions:
+  commands:
+    - id: nsbatwm.split_touching_objects
+      title: Split touching objects
+      python_name: napari_segment_blobs_and_things_with_membranes.split_touching_objects
+
+    - id: nsbatwm.threshold_otsu
+      title: Threshold (Otsu et al 1979)
+      python_name: napari_segment_blobs_and_things_with_membranes.threshold_otsu
+
+    - id: nsbatwm.connected_component_labeling
+      title: Connected Component Labeling
+      python_name: napari_segment_blobs_and_things_with_membranes.connected_component_labeling
+
+    - id: nsbatwm.seeded_watershed
+      title: Seeded Watershed
+      python_name: napari_segment_blobs_and_things_with_membranes.seeded_watershed
+
+    - id: nsbatwm.voronoi_otsu_labeling
+      title: Voronoi-Otsu Labeling
+      python_name: napari_segment_blobs_and_things_with_membranes.voronoi_otsu_labeling
+
+    - id: nsbatwm.gaussian_blur
+      title: Gaussian Blur
+      python_name: napari_segment_blobs_and_things_with_membranes.gaussian_blur
+
+    - id: nsbatwm.median_filter
+      title: Median Filter
+      python_name: napari_segment_blobs_and_things_with_membranes.median_filter
+
+    - id: nsbatwm.mode_filter
+      title: Mode Filter
+      python_name: napari_segment_blobs_and_things_with_membranes.mode_filter
+
+    - id: nsbatwm.percentile_filter
+      title: Percentile Filter
+      python_name: napari_segment_blobs_and_things_with_membranes.percentile_filter
+
+    - id: nsbatwm.white_tophat
+      title: White Top-hat Filter
+      python_name: napari_segment_blobs_and_things_with_membranes.white_tophat
+
+    - id: nsbatwm.minimum_filter
+      title: Minimum Filter
+      python_name: napari_segment_blobs_and_things_with_membranes.minimum_filter
+
+    - id: nsbatwm.subtract_background
+      title: Subtract Background
+      python_name: napari_segment_blobs_and_things_with_membranes.subtract_background
+
+    - id: nsbatwm.remove_labels_on_edges
+      title: Remove Labels on Edges
+      python_name: napari_segment_blobs_and_things_with_membranes.remove_labels_on_edges
+
+    - id: nsbatwm.expand_labels
+      title: Expand Labels
+      python_name: napari_segment_blobs_and_things_with_membranes.expand_labels
+
+    - id: nsbatwm.local_minima_seeded_watershed
+      title: Local Minima Seeded Watershed
+      python_name: napari_segment_blobs_and_things_with_membranes.local_minima_seeded_watershed
+
+    - id: nsbatwm.skeletonize
+      title: Skeletonize
+      python_name: napari_segment_blobs_and_things_with_membranes.skeletonize
+
+  menus:
+    napari/layers/segment:
+      - command: nsbatwm.split_touching_objects
+      - command: nsbatwm.connected_component_labeling
+      - command: nsbatwm.seeded_watershed
+      - command: nsbatwm.voronoi_otsu_labeling
+      - command: nsbatwm.local_minima_seeded_watershed
+      - command: nsbatwm.skeletonize
+
+    napari/layers/filter:
+      - command: nsbatwm.gaussian_blur
+      - command: nsbatwm.median_filter
+      - command: nsbatwm.mode_filter
+      - command: nsbatwm.percentile_filter
+      - command: nsbatwm.white_tophat
+      - command: nsbatwm.minimum_filter
+      - command: nsbatwm.subtract_background
+
+    napari/layers/annotate:
+      - command: nsbatwm.expand_labels
+      - command: nsbatwm.remove_labels_on_edges
+
+    napari/layers/measure:
+      - command: nsbatwm.threshold_otsu

@@ -64,6 +64,24 @@ contributions:
       title: Skeletonize
       python_name: napari_segment_blobs_and_things_with_membranes.skeletonize
 
+  widgets:
+    - command: nsbatwm.split_touching_objects
+    - command: nsbatwm.threshold_otsu
+    - command: nsbatwm.connected_component_labeling
+    - command: nsbatwm.seeded_watershed
+    - command: nsbatwm.voronoi_otsu_labeling
+    - command: nsbatwm.gaussian_blur
+    - command: nsbatwm.median_filter
+    - command: nsbatwm.mode_filter
+    - command: nsbatwm.percentile_filter
+    - command: nsbatwm.white_tophat
+    - command: nsbatwm.minimum_filter
+    - command: nsbatwm.subtract_background
+    - command: nsbatwm.remove_labels_on_edges
+    - command: nsbatwm.expand_labels
+    - command: nsbatwm.local_minima_seeded_watershed
+    - command: nsbatwm.skeletonize
+
   menus:
     napari/layers/segment:
       - command: nsbatwm.split_touching_objects

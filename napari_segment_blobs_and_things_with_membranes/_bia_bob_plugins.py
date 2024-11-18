@@ -72,4 +72,7 @@ def list_bia_bob_plugins():
     
     * Skeletonizes labeled objects.
       nsbatwm.skeletonize(image)
+      
+    * Prints a joke about programmers in a bar.
+      jokes.tell_joke()
     """

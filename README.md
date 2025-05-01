@@ -102,7 +102,7 @@ This [napari] plugin was generated with [Cookiecutter] using with [@napari]'s [c
 
 ## Installation
 
-This plugin is part of devbio-napari. To install it, please follow its [installation instructions](https://github.com/haesleinhuepf/devbio-napari#installation).
+This plugin is part of devbio-napari. To install it, please follow its [installation instructions](https://github.com/haesleinhuepf/devbio-napari#installation). Note: This plugin is not compatible with napari 0.6.0 or later.
 
 ## Contributing
 
